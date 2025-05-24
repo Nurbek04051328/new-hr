@@ -1,0 +1,229 @@
+import { defineStore } from 'pinia'
+import { api } from '@/helpers/api'
+import { reactive, computed } from 'vue'
+
+const url = '/user'
+import { notifStore } from '../helpers/notification'
+const notif = notifStore()
+
+import { loadingStore } from '../helpers/loading'
+const loading = loadingStore()
+
+import { useRoute, useRouter } from 'vue-router'
+
+export const userStore = defineStore('userStore', () => {
+  const router = useRouter()
+  const route = useRoute()
+
+  const users = reactive({
+    data: [],
+    count: 0,
+    limit: 30,
+    page: 1,
+  })
+
+  const activeUser = computed(() => {
+    return users.data.filter((item) => item.status)
+  })
+
+  const nextUser = async (limit = 1) => {
+    const { data } = await api.get(url, {
+      params: {
+        limit: limit,
+        page: users.limit,
+      },
+    })
+    console.log('NEXT', data)
+
+    if (users.count >= route?.query?.limit ? route?.query?.limit : users.limit) {
+      users.data = [
+        ...users.data,
+        ...data.data.map((item) => {
+          return { ...item, status: item.status == 'active' }
+        }),
+      ]
+    } else {
+      users.data = [...data.data]
+    }
+  }
+
+  const changePage = async (value) => {
+    users.page = value
+    router.push({ name: 'users', query: { page: users.page } })
+  }
+
+  const allUsers = async (role, search) => {
+    try {
+      const { data } = await api.get(url, {
+        params: {
+          limit: users.limit,
+          page: users.page,
+          role: role,
+          fullName: search,
+        },
+      })
+      console.log('Users', data)
+
+      users.data = [
+        ...data.data.map((item) => {
+          return {
+            ...item,
+            status: item.status == 'active',
+          }
+        }),
+      ]
+      users.count = data?.count
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const addUser = async (payload) => {
+    console.log('Payload', payload)
+
+    try {
+      loading.setLoading(true)
+      const { data } = await api.post(url, payload)
+      
+      console.log('Created User', data)
+      data.status = data.status == 'active'
+      users.data = [data, ...users.data.slice(0, users.limit - 1)]
+      users.count += 1
+      loading.setLoading(false)
+      notif.setNotif(true, userAddedMessage, 'success')
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const saveUser = async (payload) => {
+    console.log('Payload', payload)
+
+    try {
+      loading.setLoading(true)
+      const { data } = await api.put(url, payload)
+      console.log('Save User', data)
+
+      users.data = users.data?.map((item) => {
+        if (item?._id == data?._id)
+          return {
+            ...data,
+            status: data.status == 'active',
+          }
+        return item
+      })
+      loading.setLoading(false)
+      notif.setNotif(true, userUpdatedMessage, 'success')
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const getUser = async (id) => {
+    try {
+      if (!id) return false
+      return await api.get(`${url}/${id}`)
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+  const getUserInfo = async (id) => {
+    try {
+      if (!id) return false
+      const { data } = await api.get(`${url}/info/${id}`)
+      return data
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+  const getWorkdays = async () => {
+    try {
+      if (!id) return false
+      const { data } = await api.get(`${url}/work-day`)
+      return data
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+  const getWorkdayCalendar = async (params) => {
+    try {
+      const { data } = await api.get(`statistic/user/calendar`, {params})
+      return data
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const removeUser = async (id) => {
+    try {
+      await api.delete(`${url}/${id}`)
+      users.data = users.data?.filter((item) => item?._id !== id)
+      users.count -= 1
+      notif.setNotif(true, userDeletedMessage, 'info')
+    } catch (err) {
+      console.warn('Error Remove', err)
+    }
+  }
+
+  const statusUser = async (id) => {
+    try {
+      const { data } = await api.get(`${url}/status/${id}`)
+
+      users.data = users.data?.map((item) => {
+        if (item?._id == data?._id)
+          return {
+            ...data,
+            status: data.status == 'active',
+          }
+        return item
+      })
+      notif.setNotif(true, statusUpdatedMessage, 'success')
+    } catch (err) {
+      console.warn('Error Status', err)
+    }
+  }
+
+  return {
+    users,
+    allUsers,
+    addUser,
+    saveUser,
+    getUser,
+    removeUser,
+    statusUser,
+    nextUser,
+    changePage,
+    activeUser,
+    getUserInfo,
+    getWorkdays,
+    getWorkdayCalendar
+  }
+})
+
+const statusUpdatedMessage = {
+  en: 'Status updated',
+  ru: 'Статус обновлён',
+  uz: 'Holat yangilandi',
+  kr: 'Ҳолат янгиланди',
+}
+
+const userDeletedMessage = {
+  en: 'User deleted',
+  ru: 'Пользователь удалён',
+  uz: 'Foydalanuvchi o‘chirildi',
+  kr: 'Фойдаланувчи ўчирилди',
+}
+
+const userUpdatedMessage = {
+  en: 'User updated',
+  ru: 'Пользователь обновлён',
+  uz: 'Foydalanuvchi yangilandi',
+  kr: 'Фойдаланувчи янгиланди',
+}
+
+const userAddedMessage = {
+  en: 'User added',
+  ru: 'Пользователь добавлен',
+  uz: 'Foydalanuvchi qo‘shildi',
+  kr: 'Фойдаланувчи қўшилди',
+}
