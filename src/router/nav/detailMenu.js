@@ -11,8 +11,8 @@ export const detailMenu = [
     },
     children: [
       {
-        path: 'absence',
-        name: 'absence',
+        path: 'worker-absence',
+        name: 'worker-absence',
         component: () => import('@/components/absence/absencePage.vue'),
         meta: {
           active: 'workers',
@@ -20,8 +20,8 @@ export const detailMenu = [
         }
       },
       {
-        path: 'user-statistic',
-        name: 'user-statistic',
+        path: 'worker-statistic',
+        name: 'worker-statistic',
         component: () => import('@/components/users/userStatistic.vue'),
         meta: {
           active: 'workers',
@@ -35,6 +35,19 @@ export const detailMenu = [
         meta: {
           active: 'workers',
           group: 'main',
+        }
+      },
+      {
+        path: 'worker-history',
+        name: 'worker-history',
+        component: () => import('@/components/workerHistory/workerHistoryPage.vue'),
+        meta: {
+          active: 'workers',
+          group: 'main',
+          title: {
+            en: 'history worker',
+            ru: 'история работы',
+          }
         }
       },
     ]

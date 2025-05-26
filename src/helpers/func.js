@@ -76,6 +76,15 @@ export const convertDateShort = (value = new Date(), type = null) => {
 }
 
 
+export const convertTime = (hour, minus, second, type) => {
+  return type == 'full'
+    ?
+    `${addZero(hour)}:${addZero(minus)}:${addZero(second)}`
+    :
+    `${addZero(hour)}:${addZero(minus)}`
+}
+
+
 
 // export const validateIPv4 = (ip) => {
 //   const ipv4Regex =

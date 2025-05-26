@@ -83,6 +83,10 @@ const store = absenceStore()
 import { reasonStore } from '@/stores/data/reason'
 const reason_store = reasonStore()
 
+import { userStore } from '@/stores/data/users'
+const user_store = userStore()
+
+
 import { modalStore } from '@/stores/helpers/modal'
 const modal_store = modalStore()
 const { modal } = storeToRefs(modal_store)
@@ -168,7 +172,9 @@ const send = async () => {
         } else {
           await store.addAbsence(payload)
         }
+        await user_store.reloadCalendarFunction()
       }
+
       close()
     }
   } catch (err) {

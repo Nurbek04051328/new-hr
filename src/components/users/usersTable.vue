@@ -38,15 +38,15 @@
               </td>
               <td 
                 class="td-second"
-                @click="$router.push({ name: 'user-statistic', params: { id: item?._id } })"
+                @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
               >
                 {{ item.fullName || '' }}
               </td>
               <td class="td"
-              @click="$router.push({ name: 'user-statistic', params: { id: item?._id } })"
+              @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
               >{{ getRoleName(item?.role, $i18n.locale) || '' }}</td>
               <td class="td"
-              @click="$router.push({ name: 'user-statistic', params: { id: item?._id } })"
+              @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
               >{{ item.department?.name || '' }}</td>
               <td class="td">
                 <checkboxPage v-model="item.status" @click="store.statusUser(item._id)" />

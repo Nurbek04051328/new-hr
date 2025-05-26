@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 ">
+  <div class="p-4 mainScroll">
     <img
       v-if="worker?.faceUrl"
       :src="`${url}/${worker?.faceUrl}`"
@@ -35,6 +35,18 @@
         <div class="text-xs text-gray-500 2xl:text-[12px]">Пол</div>
         <div class="text-base font-medium text-mainText 2xl:text-[14px]">
           {{ worker?.gender == 'male' ? 'Мужчина' : 'Женщина' }}
+        </div>
+      </div>
+      <div class="py-2">
+        <div class="text-xs text-gray-500 2xl:text-[12px]">Дата рождения</div>
+        <div class="text-base font-medium text-mainText 2xl:text-[14px]">
+          {{ convertDateShort(worker?.birthDay) }}
+        </div>
+      </div>
+      <div class="py-2" v-if="worker?.address">
+        <div class="text-xs text-gray-500 2xl:text-[12px]">Адрес</div>
+        <div class="text-base font-medium text-mainText 2xl:text-[14px]">
+          {{ worker?.address }}
         </div>
       </div>
       <div class="py-2">

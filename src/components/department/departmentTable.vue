@@ -7,7 +7,7 @@
             <tr>
               <th class="th-first">№</th>
               <th class="th">{{ $t('name') }}</th>
-              <th class="th">{{ $t('parent') }}</th>
+              <!-- <th class="th">{{ $t('parent') }}</th> -->
               <th class="th">{{ $t('chief') }}</th>
               <th class="th">{{ $t('status') }}</th>
               <th class="th-last"></th>
@@ -22,7 +22,7 @@
             >
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
               <td class="td w-[40%] 2xl:w-fit">{{ item.name }}</td>
-              <td class="td">{{ item.parent?.name || '' }}</td>
+              <!-- <td class="td">{{ item.parent?.name || '' }}</td> -->
               <td class="td">{{ item.chief?.fullName || '' }}</td>
               <td class="td">
                 <checkboxPage v-model="item.status" @click="store.statusDepartment(item._id)" />

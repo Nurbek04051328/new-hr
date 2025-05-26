@@ -2,7 +2,7 @@
   <div :class="['flex items-center justify-between', 'mb-3']">
     <div class="relative">
       <h1 class="text-4xl font-bold text-mainText select-none">
-        {{ route?.meta?.title[locale] || '' }}
+        {{ title || route?.meta?.title[locale] || '' }}
       </h1>
       <span class="bg-hover px-2 rounded-[13px] text-mainText absolute top-0 right-[-45px]">{{ count }}</span>
     </div>
@@ -29,6 +29,9 @@ const props = defineProps({
   name: {
     type: String,
     required: true,
+  },
+  title: {
+    type: String,
   },
   id: {
     type: String,

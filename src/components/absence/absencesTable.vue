@@ -39,11 +39,11 @@
               </td>
               <td class="td-last">
                 <dropdownPage
-                  name="absence"
+                  name="worker-absence"
                   :id="item._id"
                   :boolen="index >= (count > 8 ? count - 3 : count)"
                 />
-                <tableButton name="absence" :id="item._id" />
+                <tableButton name="worker-absence" :id="item._id" />
               </td>
             </tr>
           </tbody>
@@ -61,7 +61,6 @@ import removePage from '@/assets/helpers/overlays/removePage.vue'
 import dropdownPage from '@/assets/table/dropdownPage.vue'
 import tableButton from '@/assets/table/tableButton.vue'
 import { convertDateShort } from '@/helpers/func';
-
 
 
 defineProps({

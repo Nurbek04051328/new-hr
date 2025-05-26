@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from '@/helpers/api'
 import { reactive } from 'vue'
 
-const url = '/worker'
+const url = '/worker/history'
 import { notifStore } from '../helpers/notification'
 const notif = notifStore()
 
@@ -11,51 +11,53 @@ const loading = loadingStore()
 
 import { useRouter, useRoute } from 'vue-router'
 
-export const workerStore = defineStore('workerStore', () => {
+export const workerHistoryStore = defineStore('workerHistoryStore', () => {
   const router = useRouter()
   const route = useRoute()
 
-  const worker = reactive({
+  const workerHistory = reactive({
     data: [],
     count: 0,
     limit: 30,
     page: 1,
   })
 
-  const nextWorker = async (limit = 1) => {
+  const nextWorker = async (limit, id) => {
+    console.log("nextworkerId", id);
+    
     const { data } = await api.get(url, {
       params: {
         limit: limit,
-        page: worker.limit,
+        page: workerHistory.limit,
+        user: id
       },
     })
     console.log('NEXT', data)
 
-    if (worker.count >= route?.query?.limit ? route?.query?.limit : worker.limit) {
-      worker.data = [...worker.data, ...data.data.slice(0, limit-1)]
+    if (workerHistory.count >= route?.query?.limit ? route?.query?.limit : workerHistory.limit) {
+      workerHistory.data = [...workerHistory.data, ...data.data.slice(0, limit-1)]
     } else {
-      worker.data = [...data.data]
+      workerHistory.data = [...data.data]
     }
   }
 
   const changePage = (value) => {
-    worker.page = value
-    router.push({ name: 'worker', query: { page: worker.page } })
+    workerHistory.page = value
+    router.push({ name: 'worker-history', query: { page: workerHistory.page } })
   }
 
-  const allWorker = async (search, department) => {
+  const allWorkerHistory = async (id) => {
     try {
       const { data } = await api.get(url, {
         params: {
-          limit: worker.limit,
-          page: worker.page,
-          fullName: search,
-          department,
+          limit: workerHistory.limit,
+          page: workerHistory.page,
+          user: id,
         },
       })
       console.log('Worker', data)
-      worker.data = [...data.data]
-      worker.count = data?.count
+      workerHistory.data = [...data.workerHistory]
+      workerHistory.count = data?.count
     } catch (err) {
       console.warn('Error', err)
     }
@@ -66,11 +68,13 @@ export const workerStore = defineStore('workerStore', () => {
 
     try {
       loading.setLoading(true)
+      console.log('PayloadAAdd', payload);
+      
       const { data } = await api.post(url, payload)
       console.log('Kelgan', data)
 
-      worker.data = [data, ...worker.data.slice(0, worker.limit - 1)]
-      worker.count += 1
+      workerHistory.data = [data, ...workerHistory.data.slice(0, workerHistory.limit - 1)]
+      workerHistory.count += 1
       loading.setLoading(false)
       notif.setNotif(true, workerAddedMessage, 'success')
     } catch (err) {
@@ -84,7 +88,7 @@ export const workerStore = defineStore('workerStore', () => {
       const { data } = await api.put(`${url}`, payload)
       console.log('Save Worker', data)
 
-      worker.data = worker.data?.map((item) => {
+      workerHistory.data = workerHistory.data?.map((item) => {
         if (item?._id == data?._id) return data
         return item
       })
@@ -109,8 +113,8 @@ export const workerStore = defineStore('workerStore', () => {
       if (!id) return false
       loading.setLoading(true)
       await api.delete(`${url}/${id}`)
-      worker.data = worker.data?.filter((item) => item?._id !== id)
-      worker.count -= 1
+      workerHistory.data = workerHistory.data?.filter((item) => item?._id !== id)
+      workerHistory.count -= 1
       loading.setLoading(false)
       notif.setNotif(true, workerDeletedMessage, 'info')
     } catch (err) {
@@ -119,8 +123,8 @@ export const workerStore = defineStore('workerStore', () => {
   }
 
   return {
-    worker,
-    allWorker,
+    workerHistory,
+    allWorkerHistory,
     addWorker,
     saveWorker,
     getWorker,

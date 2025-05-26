@@ -31,9 +31,7 @@ export const departmentStore = defineStore('departmentStore', () => {
   const getParent = async () => {
     try {
       const { data } = await api.get(url, {
-        params: {
-          type: 1,
-        },
+        
       })
       console.log('Parent', data)
 
@@ -69,13 +67,12 @@ export const departmentStore = defineStore('departmentStore', () => {
     router.push({ name: 'department', query: { page: department.page } })
   }
 
-  const allDepartment = async (type, search) => {
+  const allDepartment = async ( search) => {
     try {
       const { data } = await api.get(url, {
         params: {
           limit: department.limit,
           page: department.page,
-          type: type,
           name: search,
         },
       })

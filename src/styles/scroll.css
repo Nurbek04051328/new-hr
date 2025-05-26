@@ -14,6 +14,7 @@
   .mainScroll {
     @apply scroll-smooth
       [&::-webkit-scrollbar]:w-2 
+      [&::-webkit-scrollbar]:h-2 
       [&::-webkit-scrollbar-track]:bg-mainScrollTrack 
       [&::-webkit-scrollbar-thumb]:bg-mainScrollThumb 
       hover:[&::-webkit-scrollbar-thumb]:bg-mainScrollHover

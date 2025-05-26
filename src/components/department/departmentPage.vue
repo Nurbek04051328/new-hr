@@ -3,15 +3,7 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="department" :newToggleBtn="true">
-      <typeSelect
-        @update-type="updateType"
-        v-model="selectedType"
-        :selected-type="selectedType"
-        :name="name"
-        :array="type"
-      />
-    </headPart>
+    <headPart name="department" :newToggleBtn="true"/>
 
     <departmentTable
       :department="department.data"
@@ -62,7 +54,7 @@ const changePage = (value) => {
   getData()
 }
 
-const selectedType = ref(0)
+
 const search = ref('')
 
 const searchEvent = async () => {
@@ -80,14 +72,7 @@ watch(search, async (newVal) => {
   }
 })
 
-const updateType = async () => {
-  if (selectedType.value) {
-    loading.setLoading(true)
-    await department_store.allDepartment(selectedType.value)
-    return loading.setLoading(false)
-  }
-  getData()
-}
+
 
 const selectedLimit = ref(department.value.limit)
 const updateLimit = (value) => {
@@ -133,10 +118,4 @@ onMounted(async () => {
   getData()
 })
 
-const name = {
-  en: 'Type',
-  ru: 'Тип',
-  uz: 'Turi',
-  kr: 'Тури',
-}
 </script>

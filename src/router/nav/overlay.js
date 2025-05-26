@@ -89,6 +89,16 @@ export const linkMenu = [
       kr: 'Қайд ёзуви',
     },
   },
+  {
+    group: 'detail',
+    to: 'worker-history',
+    name: {
+      en: 'Events',
+      ru: 'Записы',
+      uz: 'Qayd yozuvi',
+      kr: 'Қайд ёзуви',
+    },
+  },
 
   // SETTING
   // {

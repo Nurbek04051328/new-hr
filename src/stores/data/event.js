@@ -42,6 +42,19 @@ export const eventStore = defineStore('eventStore', () => {
     }
   }
 
+  const addCalendarEvent = async (payload) => {
+    try {
+      loading.setLoading(true)
+      const { data } = await api.post(url, payload)
+      console.log('Created Event', data)
+      event.data = [data, ...event.data.slice(0, event.limit - 1)]
+      event.count += 1
+      loading.setLoading(false)
+      notif.setNotif(true, eventAddedMessage, 'success')
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
 
   const changePage = (value) => {
     event.page = value
@@ -92,11 +105,17 @@ export const eventStore = defineStore('eventStore', () => {
     changePage,
     syncEvent,
     endEvent,
-    changeWorkerPage
+    changeWorkerPage,
+    addCalendarEvent
   }
 })
 
-
+const eventAddedMessage = {
+  en: 'Event added',
+  ru: 'События добавлена',
+  uz: 'Zapis qo‘shildi',
+  kr: 'Запис қўшилди',
+}
 
 
 const sinxrStartMessage = {

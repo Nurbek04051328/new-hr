@@ -85,6 +85,26 @@
               name="password"
             />
           </div>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-1">
+            <birthDate
+              v-model="data.birthDay"
+              :error="v$.birthDay.$invalid && v$.birthDay.$dirty"
+              :label="$t('birthDate')"
+              placeholder="dd-mm-yyyy"
+              :required="true"
+              :guide="`${$t('birthDate')} ${$t('empty')}`"
+              name="birthDay"
+            />
+            <defaultInput
+              :error="v$.address.$invalid && v$.address.$dirty"
+              :guide="`${$t('address')} ${$t('empty')}`"
+              :placeholder="$t('address')"
+              :label="$t('address')"
+              v-model="data.address"
+              :required="true"
+              name="address"
+            />
+          </div>
 
           <uploadFile
             class="col-span-2"
@@ -177,7 +197,11 @@ import severalArray from '@/assets/helpers/others/severalArray.vue'
 import genderPage from '@/assets/helpers/others/genderPage.vue'
 import phoneInput from '@/assets/helpers/others/phoneInput.vue'
 import { weeks, role, gender } from '@/helpers/object'
+import birthDate from '@/assets/helpers/others/birthDate.vue'
 import multipleSelect from '@/assets/helpers/others/multipleSelect.vue'
+import { formatToISODate } from '@/helpers/func'
+
+
 defineProps({
   department: {
     type: Array,
@@ -230,6 +254,8 @@ const data = ref({
   faceUrl: '',
   department: '',
   gender: '',
+  birthDay: '',
+  address: '',
   // workTime: weeks.map((week) => ({
   //   day: week._id,
   //   startTime: '09:00',
@@ -249,6 +275,8 @@ const rules = computed(() => ({
   faceUrl: { required },
   department: { required },
   gender: { required },
+  birthDay: { required },
+  address: { required },
   doors: data.value.role == 'security' ? { required } : {},
 }))
 const v$ = useVuelidate(rules, data)
@@ -262,6 +290,8 @@ const reset = () => {
     faceUrl: '',
     department: '',
     gender: '',
+    birthDay: '',
+    address: '',
     // workTime: weeks.map((week) => ({
     //   day: week._id,
     //   startTime: '09:00',
@@ -283,7 +313,7 @@ const send = async () => {
   try {
     v$.value.$touch()
 
-    const { fullName, phone, password, role, faceUrl, department, gender, workTime, doors, _id } =
+    const { fullName, phone, password, role, faceUrl, department, gender, birthDay, address, doors, _id } =
       data.value
     if (!v$.value.$invalid) {
       const codes = [90, 91, 93, 94, 95, 97, 98, 99, 33, 88, 50, 77]
@@ -302,7 +332,7 @@ const send = async () => {
           return notif.setNotif(true, passwordLength, 'danger')
         }
       }
-
+      const formatDate = formatToISODate(birthDay)
       // const hasValidEntry = workTime.some(
       //   (item) => item.day?.length > 0 || item.startTime?.length > 0 || item.endTime?.length > 0,
       // )
@@ -333,6 +363,8 @@ const send = async () => {
         faceUrl,
         department,
         gender,
+        birthDay: formatDate,
+        address,
         // workTime: formattedWorkTime,
         doors,
       }

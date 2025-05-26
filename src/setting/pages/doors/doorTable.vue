@@ -26,19 +26,21 @@
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
               <td class="td-second">{{ item?.branch?.title }}</td>
               <td class="td-second">{{ item?.title }}</td>
-              <td class="td">{{ item?.ip }}</td>
-              <td class="td">{{ item?.port }}</td>
-              <td class="td">{{ item.login || '' }}</td>
               <td class="td">
-                {{ item.type.toUpperCase() || '' }}
+                <a target="_blank" :href="`http://${item?.ip}:${item?.port}`">{{ item?.ip }}</a>
+              </td>
+              <td class="td">{{ item?.port }}</td>
+              <td class="td">{{ item?.login || '' }}</td>
+              <td class="td">
+                {{ item?.type?.toUpperCase() || '' }}
               </td>
               <td class="td">
-                <checkboxPage v-model="item.status" @click="store.statusDoor(item._id)" />
+                <checkboxPage v-model="item.status" @click="store.statusDoor(item?._id)" />
               </td>
               <td class="td-last">
                 <dropdownPage
                   name="door"
-                  :id="item._id"
+                  :id="item?._id"
                   :boolen="
                     index >= (count > 10 ? count - 3 : count) ||
                     index >= (count > 26 ? count - 5 : count)

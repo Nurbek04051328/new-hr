@@ -2,7 +2,6 @@
   <miniModal title="Синхронизация событий">
     <div class="flex flex-col gap-4">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 bg-inherit">
-        {{ currentTheme }}
         <VueDatePicker 
           v-model="date" 
           :placeholder="`Выберите месяц`" 

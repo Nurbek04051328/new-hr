@@ -6,43 +6,32 @@
           <thead class="thead">
             <tr>
               <th class="th-first">№</th>
-              <th class="th">{{ $t('photo') }}</th>
-              <th class="th">{{ $t('fullName') }}</th>
-              <th class="th">{{ $t('department') }}</th>
-              <th class="th">{{ $t('role') }}</th>
+              <th class="th">Компания</th>
+              <th class="th">Должность</th>
+              <th class="th">Дата входа</th>
+              <th class="th">Дата выхода</th>
               <th class="th-last"></th>
             </tr>
           </thead>
 
           <tbody>
             <tr
-              v-for="(item, index) of workers"
+              v-for="(item, index) of workerHistories"
               :key="item._id"
               :class="[index % 2 !== 0 ? 'bg-index2' : '', 'hover:bg-hover']"
             >
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
-              <td class="td-img">
-                <div class="size-14 overflow-hidden">
-                  <img
-                    v-if="item.user?.faceUrl?.length > 0"
-                    :src="`${url}/${item.user?.faceUrl}`"
-                    alt=""
-                    class="object-contain size-full"
-                  />
-                  <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
-                </div>
-              </td>
-              <td class="td-second">{{ item.user?.fullName || '' }}</td>
-              <td class="td">{{ item.department?.name || '' }}</td>
-              <td class="td">{{ item.user?.role || '' }}</td>
-
+              <td class="td-second">{{ item?.company || '' }}</td>
+              <td class="td">{{ item?.staffPosition || '' }}</td>
+              <td class="td">{{ convertDateShort(item?.enterDate) }}</td>
+              <td class="td">{{ item?.leaveDate ? convertDateShort(item?.leaveDate) : '-'}}</td>
               <td class="td-last">
                 <dropdownPage
-                  name="worker"
+                  name="worker-history"
                   :id="item._id"
                   :boolen="index >= (count > 8 ? count - 3 : count)"
                 />
-                <tableButton name="worker" :id="item._id" />
+                <tableButton name="worker-history" :id="item._id" />
               </td>
             </tr>
           </tbody>
@@ -62,9 +51,12 @@ import { url } from '@/helpers/api'
 import { UserIcon } from '@heroicons/vue/24/outline'
 import dropdownPage from '@/assets/table/dropdownPage.vue'
 import tableButton from '@/assets/table/tableButton.vue'
+import { convertDateShort } from '@/helpers/func';
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 defineProps({
-  workers: {
+  workerHistories: {
     type: Array,
     requreid: true,
   },
@@ -88,13 +80,13 @@ const loading = loadingStore()
 import { removeStore } from '@/stores/helpers/remove'
 const remove = removeStore()
 
-import { workerStore } from '@/stores/data/worker'
-const store = workerStore()
+import { workerHistoryStore } from '@/stores/data/workerHistory'
+const store = workerHistoryStore()
 
 const removeItem = async () => {
   try {
     await store.removeWorker(remove.remove?.id)
-    await store.nextWorker()
+    await store.nextWorker(limit=1,route.params.id)
     remove.close()
   } catch (err) {
     console.warn('Error', err)

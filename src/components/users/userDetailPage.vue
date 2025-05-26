@@ -9,12 +9,12 @@
               class="w-[30px] h-[30px] rounded-md bg-btn flex justify-center items-center text-whiteText hover:bg-btnHover"
             />
           </button>
-          <div class="font-medium text-xl text-mainText">{{ route.meta?.title || '' }}</div>
+          <div class="font-medium text-xl text-mainText">Страница сотрудника</div>
         </div>
       </div>
       <div class="flex-1 overflow-auto">
         <div class="grid grid-cols-12 gap-3 h-full mb-3">
-          <div class="col-span-3 bg-hover rounded-[13px] h-full overflow-auto">
+          <div class="col-span-3 bg-hover rounded-[13px] h-full overflow-auto mainScroll">
             <userInfo :worker="worker" />
           </div>
           <div class="col-span-9 bg-hover rounded-[13px] overflow-auto p-5">
@@ -61,17 +61,21 @@ const getData = async () => {
 
 
 const links = [
+  // {
+  //   name: 'worker-statistic',
+  //   title: 'Статистика'
+  // },
   {
-    name: 'user-statistic',
-    title: 'Статистика'
-  },
-  {
-    name: 'absence',
+    name: 'worker-absence',
     title: 'Отсутствие'
   },
   {
     name: 'worker-events',
     title: 'События'
+  },
+  {
+    name: 'worker-history',
+    title: 'История работы'
   },
 
 ]

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from '@/helpers/api'
-import { reactive, computed } from 'vue'
+import { reactive, computed, ref } from 'vue'
 
 const url = '/user'
 import { notifStore } from '../helpers/notification'
@@ -21,6 +21,8 @@ export const userStore = defineStore('userStore', () => {
     limit: 30,
     page: 1,
   })
+
+  const reloadCalendar = ref(0)
 
   const activeUser = computed(() => {
     return users.data.filter((item) => item.status)
@@ -50,6 +52,10 @@ export const userStore = defineStore('userStore', () => {
   const changePage = async (value) => {
     users.page = value
     router.push({ name: 'users', query: { page: users.page } })
+  }
+
+  const reloadCalendarFunction = async () => {
+    reloadCalendar.value++
   }
 
   const allUsers = async (role, search) => {
@@ -85,7 +91,6 @@ export const userStore = defineStore('userStore', () => {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
       
-      console.log('Created User', data)
       data.status = data.status == 'active'
       users.data = [data, ...users.data.slice(0, users.limit - 1)]
       users.count += 1
@@ -145,9 +150,47 @@ export const userStore = defineStore('userStore', () => {
       console.warn('Error', err)
     }
   }
+
+
+  // UserCaLENDAR
   const getWorkdayCalendar = async (params) => {
     try {
       const { data } = await api.get(`statistic/user/calendar`, {params})
+      return data
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+  const getOneWorkdayCalendar = async (id) => {
+    try {
+      const { data } = await api.get(`${url}/calendar/${id}`)
+      console.log('One Workday Calendar', data);
+      return data
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const saveUserCalendar = async (payload) => {
+      try {
+        loading.setLoading(true)
+        console.log("ketdi payload", payload);
+        
+        const { data } = await api.put(`${url}/calendar`, payload)
+        console.log('Keldi payload', data)
+  
+        return data
+        loading.setLoading(false)
+        notif.setNotif(true, userCelendarUpdatedMessage, 'success')
+      } catch (err) {
+        console.warn('Error', err)
+      }
+    }
+
+  const userCreateCalendar = async (payload) => {
+    try {
+      const { data } = await api.post(`${url}/calendar`, payload)
+      
       return data
     } catch (err) {
       console.warn('Error', err)
@@ -185,6 +228,8 @@ export const userStore = defineStore('userStore', () => {
 
   return {
     users,
+    reloadCalendar,
+    reloadCalendarFunction,
     allUsers,
     addUser,
     saveUser,
@@ -196,7 +241,10 @@ export const userStore = defineStore('userStore', () => {
     activeUser,
     getUserInfo,
     getWorkdays,
-    getWorkdayCalendar
+    getWorkdayCalendar,
+    getOneWorkdayCalendar,
+    userCreateCalendar,
+    saveUserCalendar
   }
 })
 
@@ -219,6 +267,12 @@ const userUpdatedMessage = {
   ru: 'Пользователь обновлён',
   uz: 'Foydalanuvchi yangilandi',
   kr: 'Фойдаланувчи янгиланди',
+}
+const userCelendarUpdatedMessage = {
+  en: 'Updated',
+  ru: 'обновлён',
+  uz: 'Yangilandi',
+  kr: 'янгиланди',
 }
 
 const userAddedMessage = {

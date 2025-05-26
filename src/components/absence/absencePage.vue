@@ -2,7 +2,7 @@
   <absenceModal :reasons="reason_store.activeReasons" />
 
   <defaultMain>
-    <headPart name="absence" :newToggleBtn="true">
+    <headPart name="worker-absence" :newToggleBtn="true">
     </headPart>
 
     <absenceTable :absence="absence.data" :count="absence.count" :page="absence.page" :limit="absence.limit" />

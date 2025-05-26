@@ -1,11 +1,31 @@
 <template>
   <div class="lg:flex lg:h-full lg:flex-col">
     <!-- <pre>{{ days }}</pre> -->
-    <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
+    <header class="flex items-center justify-between border-b border-gray-200  py-4 lg:flex-none">
       <h1 class="text-base font-semibold leading-6 text-gray-900">
         <time>{{ calendarTitle }}</time>
       </h1>
-      <button class="py-1 px-2 rounded-md bg-defaultColor text-white">+</button>
+      <div class="flex items-center gap-2">
+        <select v-model="selectedYear" @change="changeMonth" class="border rounded px-2 py-1">
+            <option value="" disabled>Выберите год</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <!-- <option value="holiday">Праздник</option>
+            <option value="absence">Отсутствие</option> -->
+          </select>
+        <select v-model="selectedMonth" @change="changeMonth" class="border rounded px-2 py-1">
+          <option value="" disabled>Выберите месяц</option>
+          <option
+            v-for="(month, index) in monthNames"
+            :key="index"
+            :value="index"
+          >
+            {{ month }}
+          </option>
+        </select>
+      </div>
     </header>
     <div class="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
       <div class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-100 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
@@ -18,57 +38,16 @@
         <div class="py-2">Воскресенье</div>
       </div>
       <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
-        <!-- <div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
-          
-          <div
-            v-for="day in days"
-            :key="day.date + day.day"
-            :class="[
-              day.isCurrentMonth ? getStatusClass(day.dayStatus) : 'bg-gray-50 text-gray-500',
-              'relative px-3 py-2 min-h-[80px]'
-            ]"
-          >
-            <time
-              :datetime="day.date"
-              :class="day.isToday ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white' : undefined"
-            >
-              {{ day.day }}
-            </time>
-            <div v-if="day.events && day.events.length" class="mt-2 flex flex-col gap-1">
-              <div
-                v-for="event in day.events"
-                :key="event.time"
-                :class="[
-                  event.action === 'enter' ? 'text-green-700' : event.action === 'exit' ? 'text-red-600' : 'text-gray-700',
-                  'flex items-center gap-1'
-                ]"
-              >
-                <span>
-                  {{ event.action === 'enter' ? 'Вход' : event.action === 'exit' ? 'Выход' : event.action }}
-                </span>
-                <span v-if="event.time">({{ formatTime(event.time) }})</span>
-              </div>
-            </div>
-            <div v-if="day.dayStatus=='holiday'">
-              {{ day.reason }}
-            </div>
-            <div v-if="day.dayStatus=='absence'">
-              {{ day.reason }}
-            </div>
-            <div v-if="day.dayStatus=='weekend'">
-              <span >Выходной</span>
-            </div>
-          </div>
-        </div> -->
-        <!-- Mobil uchun qisqaroq variant -->
         <div class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
-          <div
+          <button
             v-for="day in days"
             :key="day.date + day.day"
+            type="button"
+            @click="openModal(day)"
             :class="[
               day.isCurrentMonth ? getStatusClass(day.dayStatus) : 'bg-gray-50',
               (day.isToday) && 'font-semibold',
-              'flex h-20 flex-col px-3 py-2 hover:bg-gray-100 focus:z-10 min-h-[80px]'
+              'flex h-20 flex-col justify-between px-3 py-2 hover:bg-gray-100 focus:z-10 min-h-[90px] text-[11px]'
             ]"
           >
             <div class="flex items-center justify-between">
@@ -88,43 +67,51 @@
                 </time>
               </div>
             </div>
-            <div v-if="day.events && day.events.length" class=" flex flex-col">
-              <div
-                v-for="event in day.events"
-                :key="event?.time"
-                @click="openLightbox(event?.pictureURL)"
-                :class="[
-                  event.action === 'enter' ? 'text-green-700' : event.action === 'exit' ? 'text-red-600' : 'text-gray-700',
-                  'flex items-center gap-1 cursor-pointer'
-                ]"
+            <div>
 
+              <div v-if="day.dayStatus=='holiday'">
+                {{ day.reason }}
+              </div>
+              <div v-if="day.dayStatus=='absence'">
+                {{ day.reason }}
+              </div>
+              <div v-if="day.dayStatus=='weekend'">
+                <span >Выходной</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div v-if="day.events && day.events.length" class=" flex flex-col">
+                  <div
+                    v-for="event in day.events"
+                    :key="event?.time"
+                    :class="[
+                      event.action === 'enter' ? 'text-green-700' : event.action === 'exit' ? 'text-red-600' : 'text-gray-700',
+                      'flex items-center gap-1 cursor-pointer leading-4 '
+                    ]"
+    
+                  >
+                  <!-- {{ day }} -->
+                    <span>
+                      {{ event?.action === 'enter' ? 'Вход' : event?.action === 'exit' ? 'Выход' : event?.action }}
+                    </span>
+                    <span v-if="event?.time">({{ formatTime(event?.time) }})</span>
+                  </div>
+                </div>
+                <div v-if="day?.workDuration?.hours>0 && day?.workDuration?.minutes>0" class="text-[13px]">
+                  ~ {{ convertTime(day?.workDuration?.hours, day?.workDuration?.minutes) }}
+                </div>
+              </div>
+              <div
+                v-if="
+                  day.dayStatus === 'workday' &&
+                  day.events.length === 0 &&
+                  day.date <= getTodayISO()
+                "
+                class="flex flex-col"
               >
-                <span>
-                  {{ event?.action === 'enter' ? 'Вход' : event?.action === 'exit' ? 'Выход' : event?.action }}
-                </span>
-                <span v-if="event?.time">({{ formatTime(event?.time) }})</span>
+                Не пришел/а
               </div>
             </div>
-            <div
-              v-if="
-                day.dayStatus === 'workday' &&
-                day.events.length === 0 &&
-                day.date <= getTodayISO()
-              "
-              class="flex flex-col"
-            >
-              Не пришел/а
-            </div>
-            <div v-if="day.dayStatus=='holiday'">
-              {{ day.reason }}
-            </div>
-            <div v-if="day.dayStatus=='absence'">
-              {{ day.reason }}
-            </div>
-            <div v-if="day.dayStatus=='weekend'">
-              <span >Выходной</span>
-            </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -134,30 +121,90 @@
     :imgs="[currentImage]"
     @hide="closeLightbox"
   />
+  <userEventCalendarModal
+    v-if="showModal && calendarID"
+    :calendarId="calendarID"
+    @close="showModal = false"
+    @reload="getData"
+  />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { userStore } from '@/stores/data/users'
+import { doorStore } from '@/stores/data/door'
 import { url } from '@/helpers/api'
+import { convertTime } from '@/helpers/func'
 import { GiftIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import VueEasyLightbox from 'vue-easy-lightbox';
+import userEventCalendarModal from '@/components/users/userEventCalendarModal.vue'
+import { nextTick } from 'vue'
+
 
 
 const route = useRoute()
 const store = userStore()
+const door_store = doorStore()
 const id = ref('')
 const workerCalendar = ref({})
 const days = ref([])
 const calendarTitle = ref('')
+const selectedMonth = ref('')
+const selectedYear = ref('2025')
+
+const showModal = ref(false)
+const calendarID = ref('')
+
+function toISO(dateStr) {
+  return new Date(dateStr).toISOString()
+}
+
+
+async function openModal(day) {
+  if (!day?.calendarId) {
+    const payload = {
+      user: id.value,
+      date: new Date(day.date).toISOString(),
+      shift: "off",
+    }
+    console.log("payload", payload);
+    
+    const data = await store.userCreateCalendar(payload)
+    console.log("data", data);
+    
+    if (data && data._id) {
+      calendarID.value = data._id
+      showModal.value = true
+      getData()
+    } else {
+      // fallback: agar calendarId boshqa propertyda bo‘lsa, uni tekshiring
+      calendarID.value = data?._id || data?.id || ''
+      showModal.value = true
+    }
+    await nextTick()
+    return
+  }
+  calendarID.value = day.calendarId
+  await nextTick()
+  showModal.value = true
+}
+
+
+// filterMonth
+function changeMonth() {
+  console.log("tanlangan oy",selectedMonth.value);
+  
+  getData()
+}
+
 
 const monthNames = [
   'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
 ]
 
-// Bugungi sanani to'g'ri olish uchun (mahalliy vaqt emas, UTC emas, faqat sana)
+// Bugungi sanani togri olish uchun (mahalliy vaqtmas, UTCammas, faqat sana)
 function getTodayISO() {
   const now = new Date()
   const yyyy = now.getFullYear()
@@ -198,30 +245,31 @@ const fillDays = (data, year, month) => {
       isWorkingDay: false,
       events: [],
       calendarId: '',
-      reason:''
+      reason:'',
+      workDuration: {}
     })
   }
   data.forEach(item => {
-  const dateObj = new Date(year, month, item.day)
-  // const dateStr = dateObj.toISOString().split('T')[0] // BU EMAS!
-  // TO‘G‘RISI:
-  const yyyy = dateObj.getFullYear()
-  const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
-  const dd = String(dateObj.getDate()).padStart(2, '0')
-  const dateStr = `${yyyy}-${mm}-${dd}`
+    // item.day - bu 1-based (1,2,3...), month esa 0-based
+    const dateObj = new Date(year, month, item.day)
+    const yyyy = dateObj.getFullYear()
+    const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
+    const dd = String(dateObj.getDate()).padStart(2, '0')
+    const dateStr = `${yyyy}-${mm}-${dd}`
 
-  daysArr.push({
-    date: dateStr,
-    day: item.day,
-    isCurrentMonth: true,
-    dayStatus: item.dayStatus,
-    isWorkingDay: item.isWorkingDay,
-    events: item.events || [],
-    isToday: dateStr === getTodayISO(),
-    reason: item.reason,
-    calendarId: item.calendarId,
+    daysArr.push({
+      date: dateStr,
+      day: item?.day,
+      isCurrentMonth: true,
+      dayStatus: item?.dayStatus,
+      isWorkingDay: item?.isWorkingDay,
+      events: item?.events || [],
+      isToday: dateStr === getTodayISO(),
+      reason: item?.reason,
+      calendarId: item?.calendarId,
+      workDuration: item?.workDuration,
+    })
   })
-})
   while (daysArr.length < 42) {
     daysArr.push({
       date: '',
@@ -239,7 +287,18 @@ const fillDays = (data, year, month) => {
 
 const getData = async () => {
   if (!id.value) return
-  workerCalendar.value = await store.getWorkdayCalendar({ _id: id.value })
+  console.log("ssss",selectedMonth.value);
+  const params = { _id: id.value }
+  if (selectedMonth.value !== '' && selectedMonth.value !== null && selectedMonth.value !== undefined) {
+    params.month = selectedMonth.value
+  }
+  if (selectedYear.value !== '' && selectedYear.value !== null && selectedYear.value !== undefined) {
+    params.year = selectedYear.value
+  }
+  console.log(params);
+  
+  workerCalendar.value = await store.getWorkdayCalendar(params)
+  await door_store.allDoor()
   console.log("workercalendar", workerCalendar.value);
   
   const { data, year, month } = workerCalendar.value
@@ -268,7 +327,12 @@ const closeLightbox = () => {
   currentImage.value = '';
 };
 
-
+watch(
+  () => store.reloadCalendar,
+  () => {
+    getData()
+  }
+)
 
 onMounted(() => {
   id.value = route.params.id

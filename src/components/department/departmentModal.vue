@@ -11,7 +11,7 @@
         name="name"
         :focus="true"
       />
-      <defaultSelect
+      <!-- <defaultSelect
         :error="v$.type.$invalid && v$.type.$dirty"
         :guide="`${$t('type')} ${$t('empty')}`"
         v-model="data.type"
@@ -21,8 +21,8 @@
         title="name"
         :label="$t('type')"
         name="type"
-      />
-      <div v-if="data.type == 2" v-motion-slide-visible-once-bottom>
+      /> -->
+      <!-- <div v-if="data.type == 2" v-motion-slide-visible-once-bottom>
         <defaultSelect
           :error="v$.parent.$invalid && v$.parent.$dirty"
           :guide="`${$t('parent')} ${$t('empty')}`"
@@ -36,7 +36,7 @@
           title="name"
           name="parent"
         />
-      </div>
+      </div> -->
 
       <defaultSelect
         :guide="`${$t('parent')} ${$t('empty')}`"
@@ -172,13 +172,11 @@ import { formatToISO, formatToTime } from '@/helpers/func'
 
 const data = ref({
   name: '',
-  type: '',
   workTime: weeks.map((week) => ({
     day: week._id,
     startTime: '09:00',
     endTime: '17:00',
   })),
-  parent: '',
   chief: '',
   file: '',
 })
@@ -188,22 +186,17 @@ import { required } from '@vuelidate/validators'
 
 const rules = computed(() => ({
   name: { required },
-  type: { required },
-  parent: data.value.type !== 1 ? { required } : {},
-  chief: data.value.type !== 1 ? {} : {},
 }))
 const v$ = useVuelidate(rules, data)
 
 const reset = () => {
   data.value = {
     name: '',
-    type: '',
     workTime: weeks.map((week) => ({
       day: week._id,
       startTime: '09:00',
       endTime: '17:00',
     })),
-    parent: '',
     chief: '',
   }
   v$.value.$reset()
