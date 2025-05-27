@@ -3,14 +3,37 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="workers" :newToggleBtn="true">
+    <headPart name="workers" :newToggleBtn="true" :count="users.count">
+      <getSelect
+        @update-type="updateType"
+        v-model="searchUserData.department"
+        :name="departmentMessage"
+        class="w-full"
+        placeholder="Выберите отдел"
+        :array="d_store.activeDepartment"
+        option_title="name"
+      />
       <typeSelect
         @update-type="updateType"
-        v-model="selectedType"
+        v-model="searchUserData.role"
+        class="w-full"
+        placeholder="Выберите роль"
         :selected-type="selectedType"
         :name="roleMessage"
         :array="role"
       />
+      <button
+        @click="clearSearch"
+        class="flex items-center gap-2 px-2 py-2 bg-redColor text-white rounded hover:bg-hoverRed"
+      >
+        <XMarkIcon class="w-5 h-5" />
+      </button>
+      <button
+        @click="updateType"
+        class="flex items-center gap-2 px-2 py-2 bg-greenColor text-white rounded hover:bg-hoverGreen"
+      >
+        <MagnifyingGlassIcon class="w-5 h-5" />
+      </button>
     </headPart>
 
     <usersTable :user="users.data" :count="users.count" :page="users.page" :limit="users.limit" />
@@ -30,11 +53,12 @@ import defaultHeader from '@/views/home/defaultHeader.vue'
 import defaultMain from '@/views/home/defaultMain.vue'
 import usersTable from './usersTable.vue'
 import usersModal from './usersModal.vue'
+import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 import typeSelect from '@/assets/helpers/others/typeSelect.vue'
 import { role } from '@/helpers/object'
-
+import getSelect from '@/assets/helpers/others/getSelect.vue'
 import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
@@ -94,15 +118,29 @@ const updateLimit = (value) => {
   router.replace({ query: newQuery })
 }
 
-const selectedType = ref(0)
+const searchUserData = ref({
+  department: '',
+  role: '',
+})
 const updateType = async () => {
-  if (selectedType.value) {
+  if (searchUserData.value) {
     loading.setLoading(true)
-    await store.allUsers(selectedType.value)
+    const filtered = Object.fromEntries(
+      Object.entries(searchUserData.value).filter(([_, v]) => v !== '')
+    )
+    await store.allUsers(filtered)
     return loading.setLoading(false)
   }
   getData()
 }
+
+const clearSearch = async () => {
+  searchUserData.value = {
+    department: '',
+    role: '',
+  }
+  getData()
+};
 
 const getData = async () => {
   try {
@@ -113,6 +151,8 @@ const getData = async () => {
     console.warn('Error', err)
   }
 }
+
+
 
 onMounted(() => {
   if (route.query.limit) {

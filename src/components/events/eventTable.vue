@@ -38,7 +38,7 @@
                     <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
                 </div>
               </td>
-              <td class="td-second cursor-pointer" @click="$router.push({ name: 'wworker-absence', params: { id: item?.user?._id } })">{{ item.user?.fullName || '' }}</td>
+              <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-absence', params: { id: item?.user?._id } })">{{ item.user?.fullName || '' }}</td>
               <td class="td">{{ item?.user?.department?.name || '' }}</td>
               <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
               <td class="td text-center">
@@ -67,6 +67,13 @@
                     <img
                       v-if="item.pictureURL"
                       :src="`${url}/${item?.pictureURL}`"
+                      alt="image pictureurl"
+                      class="object-contain size-full cursor-pointer"
+                      @click="openLightbox(item?.pictureURL)"
+                    />
+                    <img
+                      v-else
+                      src="@/assets/images/image-not-found.png"
                       alt=""
                       class="object-contain size-full cursor-pointer"
                       @click="openLightbox(item?.pictureURL)"

@@ -1,13 +1,13 @@
 <template>
   <defaultHeader />
   <defaultMain styles="overflow-y-auto pr-2">
-    <div class="text-xl font-medium th">Главная страница</div>
+    <!-- <div class="text-xl font-medium th">Главная страница</div> -->
     <div class="grid grid-cols-12 gap-3">
       <div class="overflow-hidden col-span-4 md-max:col-span-12 flex flex-col gap-3">
         <homeAllCount :count="countAllEvent" />
         <homeEventStatistic :count="lastStatistic?.count" :came="lastStatistic?.came" :notCame="lastStatistic?.notCame" />
-        <lastEvent :lastEvent="lastStatistic?.lastEnter"  />
-        <lastEvent :lastEvent="lastStatistic?.lastExit" />
+        <lastEvent v-if="lastStatistic?.lastEnter" :lastEvent="lastStatistic?.lastEnter"  />
+        <lastEvent v-if="lastStatistic?.lastExit" :lastEvent="lastStatistic?.lastExit" />
         <!-- <pre>{{ lastStatistic }}</pre> -->
       </div>
       <div class="overflow-hidden col-span-8 md-max:col-span-12">

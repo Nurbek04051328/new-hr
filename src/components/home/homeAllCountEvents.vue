@@ -1,11 +1,11 @@
 <template>
-  <div class="px-[25px] py-[15px] rounded-[13px] shadow-sm bg-hover space-y-4">
-    <div class="flex justify-between">
-      <div class="text-[#817295] text-[18px] w-[55%]">
+  <div class="px-[25px] pt-[15px] rounded-[13px] shadow-sm bg-hover space-y-4">
+    <div class="flex flex-col justify-between">
+      <div class="text-[#483D5B] text-[18px] font-bold">
+        Количество всех записей
+      </div>
+      <!-- <div class="text-[#817295] text-[18px] w-[55%]">
         <div class="flex gap-4 mb-4">
-          <div class="text-[#483D5B] text-[18px] font-bold">
-            Количество всех записей
-          </div>
         </div>
         <div class=" text-base">
           <div
@@ -21,11 +21,19 @@
             <div class="text-[#483D5B] text-[17px] font-bold">{{ item.value }}</div>
           </div>
         </div>
-      </div>
-      <apexchart width="180" type="radialBar" :options="options" :series="series"></apexchart>
+      </div> -->
+      <apexchart 
+        type="radialBar"
+        :options="options"
+        :series="series"
+        height="200"
+        width="100%"
+        style="width:100%; max-width:400px; margin:auto;"
+      ></apexchart>
     </div>
   </div>
 </template>
+
 <script setup>
 import { computed, watchEffect, defineProps } from 'vue'
 const props = defineProps(['count'])
@@ -56,7 +64,7 @@ const list = computed(() => [
     value: props?.count?.week || 0,
   },
   {
-    class: '#fde047',
+    class: '#d9bf32',
     bg: 'bg-yellowColor',
     title: 'Ежемесячно',
     value: props?.count?.month || 0,
@@ -65,23 +73,50 @@ const list = computed(() => [
 
 const options = computed(() => ({
   chart: {
-    id: `Hr-vuechart-events`,
+    id: `Hr-vuechart-events-count`,
     type: 'radialBar',
-    height: 180
+    height: 200,
+  },
+  plotOptions: {
+    radialBar: {
+      offsetY: 0,
+      startAngle: 0,
+      endAngle: 270,
+      hollow: {
+        margin: 5,
+        size: '20%',
+        background: 'transparent',
+        image: undefined,
+      },
+      dataLabels: {
+        name: {
+          show: false,
+        },
+        value: {
+          show: false,
+        }
+      },
+      barLabels: {
+        enabled: true,
+        useSeriesColors: true,
+        offsetX: -8,
+        fontSize: '16px',
+        formatter: function(seriesName, opts) {
+          return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
+        },
+      },
+    }
   },
   labels: list.value.map((t) => t.title) || [],
+  colors: list.value.map((t) => t.class) || [],
   legend: {
     show: false
   },
-  colors: list.value.map((t) => t.class) || [],
-  dataLabels: {
-    enabled: false
-  }
 }))
 
 watchEffect(() => {
   if (series.value.every((val) => val !== undefined)) {
-    ApexCharts.exec('vuechart-events', 'updateSeries', series.value)
+    ApexCharts.exec('Hr-vuechart-events-count', 'updateSeries', series.value)
   }
 })
 </script>

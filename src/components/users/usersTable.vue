@@ -8,8 +8,8 @@
               <th class="th-first">№</th>
               <th class="th">{{ $t('photo') }}</th>
               <th class="th">{{ $t('fullName') }}</th>
-              <th class="th">{{ $t('role') }}</th>
               <th class="th">{{ $t('department') }}</th>
+              <th class="th">{{ $t('role') }}</th>
               <th class="th">{{ $t('status') }}</th>
               <th class="th-last"></th>
             </tr>
@@ -44,10 +44,10 @@
               </td>
               <td class="td"
               @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
-              >{{ getRoleName(item?.role, $i18n.locale) || '' }}</td>
+              >{{ item.department?.name || '' }}</td>
               <td class="td"
               @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
-              >{{ item.department?.name || '' }}</td>
+              >{{ getRoleName(item?.role, $i18n.locale) || '' }}</td>
               <td class="td">
                 <checkboxPage v-model="item.status" @click="store.statusUser(item._id)" />
               </td>

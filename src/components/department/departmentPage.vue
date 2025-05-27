@@ -3,7 +3,7 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="department" :newToggleBtn="true"/>
+    <headPart name="department" :newToggleBtn="true" :count="department.count"/>
 
     <departmentTable
       :department="department.data"

@@ -285,6 +285,9 @@ const fillDays = (data, year, month) => {
   days.value = daysArr
 }
 
+
+
+
 const getData = async () => {
   if (!id.value) return
   console.log("ssss",selectedMonth.value);

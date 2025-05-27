@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[25px] py-[15px] rounded-[13px] shadow-sm bg-hover space-y-4">
+  <div class="px-[25px] py-[5px] rounded-[13px] shadow-sm bg-hover space-y-4">
     <div class="flex justify-between items-center">
       <div class="text-[#817295] text-[18px] w-[55%] space-y-2">
         <div class="flex items-center gap-4">

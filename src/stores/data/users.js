@@ -58,13 +58,13 @@ export const userStore = defineStore('userStore', () => {
     reloadCalendar.value++
   }
 
-  const allUsers = async (role, search) => {
+  const allUsers = async (dataSearch, search) => {
     try {
       const { data } = await api.get(url, {
         params: {
           limit: users.limit,
           page: users.page,
-          role: role,
+          ...dataSearch,
           fullName: search,
         },
       })

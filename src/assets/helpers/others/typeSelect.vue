@@ -14,10 +14,9 @@
       ]"
     >
       <option
-        :value="0"
-        class="bg-main text-changeText"
-        :hidden="model == 0"
-        :disabled="model == 0"
+        value=""
+        disabled 
+        selected
       >
         {{ name[locale] }}
       </option>

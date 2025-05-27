@@ -43,6 +43,12 @@
           @click="openFaceBox(lastEvent?.user?.faceUrl)" 
           alt=""
         >
+        <img 
+          v-else
+          src="@/assets/images/man-avatar.png" 
+          class="object-contain w-24  size-full cursor-pointer rounded-[13px]"
+          alt="Avataruserimage"
+        >
       </div>
     </div>
   </div>
