@@ -1,19 +1,17 @@
 import { defineStore } from 'pinia'
 import { api } from '@/helpers/api'
-import { reactive, computed } from 'vue'
+import { reactive, computed, ref } from 'vue'
 
 const url = '/door'
 import { notifStore } from '../helpers/notification'
-const notif = notifStore()
-
 import { loadingStore } from '../helpers/loading'
-const loading = loadingStore()
-
 import { useRouter, useRoute } from 'vue-router'
 
 export const doorStore = defineStore('doorStore', () => {
+  const notif = notifStore()
   const router = useRouter()
   const route = useRoute()
+  const loading = loadingStore()
 
   const door = reactive({
     data: [],
@@ -21,6 +19,10 @@ export const doorStore = defineStore('doorStore', () => {
     limit: 30,
     page: 1,
   })
+
+  const statusDoors = ref([])
+
+
 
   const activeDoors = computed(() => {
     return door.data.filter((item) => item.status)
@@ -162,6 +164,7 @@ export const doorStore = defineStore('doorStore', () => {
   return {
     door,
     allDoor,
+    statusDoors,
     addDoor,
     saveDoor,
     getDoor,

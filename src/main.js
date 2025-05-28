@@ -16,12 +16,15 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const app = createApp(App)
+// const pinia = createPinia()
+
+
 app.component('VueDatePicker', VueDatePicker)
 app.use(i18n)
 app.use(VueCookies, { expires: '7d' })
-app.use(createPinia())
 app.use(MotionPlugin)
 app.use(VueApexCharts)
 app.use(router)
+app.use(createPinia())
 
 app.mount('#app')

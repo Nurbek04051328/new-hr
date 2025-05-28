@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[25px] pt-[15px] rounded-[13px] shadow-sm bg-hover space-y-4">
+  <div class="px-[25px] pt-[10px] rounded-[13px] shadow-sm bg-hover space-y-4">
     <div class="flex flex-col justify-between">
       <div class="text-[#483D5B] text-[18px] font-bold">
         Количество всех записей

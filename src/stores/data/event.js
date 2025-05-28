@@ -4,10 +4,8 @@ import { reactive } from 'vue'
 
 const url = '/event'
 import { notifStore } from '../helpers/notification'
-const notif = notifStore()
 
 import { loadingStore } from '../helpers/loading'
-const loading = loadingStore()
 
 import { useRouter, useRoute } from 'vue-router'
 
@@ -15,6 +13,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 
 export const eventStore = defineStore('eventStore', () => {
+  const loading = loadingStore()
+  const notif = notifStore()
   const router = useRouter()
   const route = useRoute()
 
@@ -37,6 +37,21 @@ export const eventStore = defineStore('eventStore', () => {
       console.log('event', data)
       event.data = [...data.data]
       event.count = data?.count
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+  const newEventForSocket = async (count) => {
+    try {
+      const { data } = await api.get(url, {
+        params: {
+          limit: count,
+          page: 1,
+        },
+      })
+      console.log('socketEvent', data)
+      event.data = [...data.data, ...event.data]
+      event.count += data.data.length
     } catch (err) {
       console.warn('Error', err)
     }
@@ -106,7 +121,8 @@ export const eventStore = defineStore('eventStore', () => {
     syncEvent,
     endEvent,
     changeWorkerPage,
-    addCalendarEvent
+    addCalendarEvent,
+    newEventForSocket
   }
 })
 

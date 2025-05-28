@@ -3,8 +3,8 @@
     <div class="flex justify-between items-center w-full">
       <div class="text-[#817295] text-[24px] w-[60%]">
         <div class="text-[13px]">{{ lastEvent?.door?.branch?.title }}</div>
-        <div>{{ lastEvent?.user?.fullName }}</div>
-        <span class="bg-lightBlue border border-aside rounded-[13px] px-2 py-1 text-[#483D5B] text-[14px]">
+        <div class="text-xl">{{ lastEvent?.user?.fullName }}</div>
+        <span class=" border border-aside rounded-[13px] px-2 py-1 text-mainText text-[14px]">
           {{ lastEvent?.user?.department?.name }}
         </span>
         <div class="w-full flex items-center justify-between gap-2 mt-4">

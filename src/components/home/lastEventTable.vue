@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[25px] py-[18px] rounded-[13px] shadow-sm bg-hover space-y-4">
+  <div class="px-[25px] pt-[18px] pb-[38px] rounded-[13px] shadow-sm bg-hover space-y-4">
     <table class="table">
       <thead class="">
         <tr>
@@ -19,7 +19,7 @@
       <tbody v-if="lastEvents?.length > 0">
         <tr
           v-for="(item, index) of lastEvents"
-          :key="item._id"
+          :key="item?._id"
           :class="[index % 2 !== 0 ? 'bg-index2' : '', 'hover:bg-hover']"
         >
           <td class="td-first">{{ index + 1 }}</td>
@@ -27,28 +27,28 @@
             <div class="size-14 overflow-hidden">
 
                 <img
-                  v-if="item.user?.faceUrl?.length > 0"
-                  :src="`${url}/${item.user?.faceUrl}`"
+                  v-if="item?.user?.faceUrl?.length > 0"
+                  :src="`${url}/${item?.user?.faceUrl}`"
                   alt=""
                   class="object-contain size-full cursor-pointer rounded-[13px]"
-                  @click="openFaceBox(item.user?.faceUrl)"
+                  @click="openFaceBox(item?.user?.faceUrl)"
                 />
                 <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
             </div>
           </td>
-          <td class="td-second cursor-pointer" @click="$router.push({ name: 'detailWorker', params: { id: item?.user?._id } })">{{ item.user?.fullName || '' }}</td>
+          <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-absence', params: { id: item?.user?._id } })">{{ item?.user?.fullName || '' }}</td>
           <td class="td">{{ item?.user?.department?.name || '' }}</td>
           <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
           <td class="td text-center">
-            {{ item.door?.branch?.title || '' }}
+            {{ item?.door?.branch?.title || '' }}
           </td>
           <td class="td text-center">
             <div>
-              <div>{{ item.door?.title || '' }}</div>
+              <div>{{ item?.door?.title || '' }}</div>
               <div 
                 class="text-sm"
-                :class="item.door?.type === 'exit' ? 'text-red' : item.door?.type === 'enter' ? 'text-green' : ''" 
-                >{{ getDoorTypeName(item.door?.type, $i18n.locale) || '' }}</div>
+                :class="item?.action === 'exit' ? 'text-redColor' : item?.action === 'enter' ? 'text-greenColor' : ''" 
+                >{{ getDoorTypeName(item?.action, $i18n.locale) || '' }}</div>
             </div>
           </td>
           <td class="td">
@@ -68,7 +68,13 @@
                   class="object-contain size-full cursor-pointer rounded-[13px]"
                   @click="openLightbox(item?.pictureURL)"
                 />
-                
+                <img
+                  v-else
+                  src="@/assets/images/image-not-found.png"
+                  alt=""
+                  class="object-contain size-full cursor-pointer"
+                  @click="openLightbox(item?.pictureURL)"
+                />
             </div>
           </td>
         </tr>

@@ -56,6 +56,13 @@
                       class="object-contain size-full cursor-pointer"
                       @click="openLightbox(item?.pictureURL)"
                     />
+                    <img
+                      v-else
+                      src="@/assets/images/image-not-found.png"
+                      alt=""
+                      class="object-contain size-full cursor-pointer"
+                      @click="openLightbox(item?.pictureURL)"
+                    />
                   </div>
                 </td>
               </tr>

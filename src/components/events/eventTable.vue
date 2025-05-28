@@ -50,7 +50,9 @@
                   <div 
                     class="text-sm"
                     :class="item?.action === 'exit' ? 'text-redColor' : item?.action === 'enter' ? 'text-greenColor' : ''" 
-                    >{{ getDoorTypeName(item?.action, $i18n.locale) || '' }}</div>
+                  >
+                    {{ getDoorTypeName(item?.action, $i18n.locale) || '' }}
+                  </div>
                 </div>
               </td>
               <td class="td">
