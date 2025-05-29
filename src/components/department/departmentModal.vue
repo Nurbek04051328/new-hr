@@ -4,9 +4,9 @@
       <defaultInput
         :error="v$.name.$invalid && v$.name.$dirty"
         v-model="data.name"
-        placeholder="John"
+        placeholder="Введите название"
         :guide="`${$t('name')} ${$t('empty')}`"
-        :label="$t('name')"
+        label="Введите название"
         :required="true"
         name="name"
         :focus="true"
@@ -39,7 +39,6 @@
       </div> -->
 
       <defaultSelect
-        :guide="`${$t('parent')} ${$t('empty')}`"
         :placeholder="$t('departmentText')"
         :translates="true"
         :disabled="data.type == 0"

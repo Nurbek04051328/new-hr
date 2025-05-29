@@ -32,8 +32,10 @@
         door__store.statusDoors = [...status];
       });
       socket.on("new-events", async(count) => {
-        console.log('new-events', count);
-        await event_store.newEventForSocket(count)
+        console.log('new-events', count.count);
+        if(count.count > 0) {
+          await event__store.newEventForSocket(count.count)
+        }
       });
       
     } 

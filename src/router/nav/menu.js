@@ -3,6 +3,7 @@ import {
   BuildingLibraryIcon,
   ClipboardDocumentCheckIcon,
   UserGroupIcon,
+  CalendarDaysIcon,
   HomeIcon,
   Cog8ToothIcon,
 } from '@heroicons/vue/24/outline'
@@ -91,6 +92,42 @@ export const menu = [
       search: '',
     },
   },
+  // {
+  //   path: 'logger',
+  //   name: 'logger',
+  //   component: () => import('@/components/logger/loggerPage.vue'),
+  //   meta: {
+  //     title: {
+  //       en: 'Logger',
+  //       ru: 'Запись журнала',
+  //       uz: 'Log yozuvi',
+  //       kr: 'Log ёзуви',
+  //     },
+  //     icon: CalendarDaysIcon,
+  //     group: 'main',
+  //     search: '',
+  //     children: [
+  //       {
+  //         path: 'logger-router',
+  //         name: 'logger-router',
+  //         component: () => import('@/components/logger/childloggerRouter.vue'),
+  //         meta: {
+  //           active: 'logger',
+  //           group: 'main',
+  //         }
+  //       },
+  //       {
+  //         path: 'logger-door',
+  //         name: 'logger-door',
+  //         component: () => import('@/components/logger/childLoggerDoor.vue'),
+  //         meta: {
+  //           active: 'workers',
+  //           group: 'main',
+  //         }
+  //       },
+  //     ]
+  //   },
+  // },
 
   {
     path: 'settings/',
