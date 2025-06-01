@@ -4,14 +4,14 @@ import { reactive, computed } from 'vue'
 
 const url = '/branch'
 import { notifStore } from '../helpers/notification'
-const notif = notifStore()
 
 import { loadingStore } from '../helpers/loading'
-const loading = loadingStore()
 
 import { useRouter, useRoute } from 'vue-router'
 
 export const branchStore = defineStore('branchStore', () => {
+  const notif = notifStore()
+  const loading = loadingStore()
   const router = useRouter()
   const route = useRoute()
 

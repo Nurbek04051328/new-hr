@@ -9,6 +9,8 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import { setting } from '../setting/setting'
+import { detailSettingMenu } from '../nav/detailSettingMenu'
+
 
 export const menu = [
   {
@@ -145,6 +147,6 @@ export const menu = [
       group: 'setting',
       search: '',
     },
-    children: [...setting],
+    children: [...setting, ...detailSettingMenu],
   },
 ]

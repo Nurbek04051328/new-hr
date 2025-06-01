@@ -1,5 +1,5 @@
 import { BuildingStorefrontIcon, BuildingOffice2Icon, GiftIcon, DocumentCheckIcon, LanguageIcon } from '@heroicons/vue/24/outline'
-
+import { detailSettingMenu } from '../nav/detailSettingMenu'
 export const setting = [
   // {
   //   path: 'language',
@@ -81,4 +81,5 @@ export const setting = [
       search: '',
     },
   },
+  
 ]

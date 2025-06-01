@@ -42,7 +42,6 @@ defineProps({
   },
   selectedType: {
     type: null,
-    required: true,
   },
   name: {
     type: Object,

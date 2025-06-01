@@ -4,18 +4,18 @@ import { reactive, computed } from 'vue'
 
 const url = '/statistic'
 import { notifStore } from '../helpers/notification'
-const notif = notifStore()
 
 import { loadingStore } from '../helpers/loading'
-const loading = loadingStore()
 
 import { useRouter, useRoute } from 'vue-router'
 
 export const statisticStore = defineStore('statisticStore', () => {
+  const loading = loadingStore()
+  const notif = notifStore()
   const router = useRouter()
   const route = useRoute()
 
-  const door = reactive({
+  const statistic = reactive({
     data: [],
     count: 0,
     limit: 30,

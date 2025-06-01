@@ -54,9 +54,8 @@ const worker = ref({})
 const getData = async () => {
   if (!id.value) return false
   worker.value = await store.getUserInfo(id.value)
-  
-  
 }
+
 
 
 

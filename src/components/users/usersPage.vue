@@ -18,7 +18,6 @@
         v-model="searchUserData.role"
         class="w-full"
         placeholder="Выберите роль"
-        :selected-type="selectedType"
         :name="roleMessage"
         :array="role"
       />
@@ -168,5 +167,11 @@ const roleMessage = {
   ru: 'Роль',
   uz: 'Roli',
   kr: 'Роли',
+}
+const departmentMessage = {
+  en: 'Department',
+  ru: 'Отдел',
+  uz: 'Bo‘lim',
+  kr: 'Бўлим',
 }
 </script>

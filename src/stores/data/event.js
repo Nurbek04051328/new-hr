@@ -61,7 +61,6 @@ export const eventStore = defineStore('eventStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Event', data)
       event.data = [data, ...event.data.slice(0, event.limit - 1)]
       event.count += 1
       loading.setLoading(false)

@@ -1,6 +1,11 @@
 <template>
   <div :class="['flex items-center justify-between', 'mb-3']">
-    <div class="relative">
+    <div class="relative flex">
+      <button v-if="backLink" @click="router.push({ name: backLink })">
+        <ChevronLeftIcon
+          class="w-[30px] h-[30px] mr-4 rounded-md bg-btn flex justify-center items-center text-whiteText hover:bg-btnHover"
+        />
+      </button>
       <h1 class="text-4xl font-bold text-mainText select-none">
         {{ title || route?.meta?.title[locale] || '' }}
       </h1>
@@ -24,7 +29,8 @@
   </div>
 </template>
 <script setup>
-import { PlusIcon } from '@heroicons/vue/20/solid'
+import { PlusIcon, ChevronLeftIcon } from '@heroicons/vue/20/solid'
+
 const props = defineProps({
   name: {
     type: String,
@@ -41,6 +47,9 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  backLink: {
+    type: String,
+  },
   newToggleBtn: {
     type: Boolean,
     required: false,
@@ -52,8 +61,9 @@ const props = defineProps({
 import { modalStore } from '@/stores/helpers/modal'
 const modal = modalStore()
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 
 import { useI18n } from 'vue-i18n'
 import { onMounted, onUnmounted } from 'vue'

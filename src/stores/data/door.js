@@ -22,7 +22,12 @@ export const doorStore = defineStore('doorStore', () => {
 
   const statusDoors = ref([])
 
-
+  const syncedDoorWorker = reactive({
+    data: [],
+    count: 0,
+    limit: 30,
+    page: 1,
+  })
 
   const activeDoors = computed(() => {
     return door.data.filter((item) => item.status)
@@ -35,8 +40,6 @@ export const doorStore = defineStore('doorStore', () => {
         page: door.limit,
       },
     })
-    console.log('NEXT', data)
-
     if (door.count >= route?.query?.limit ? route?.query?.limit : door.limit) {
       door.data = [
         ...door.data,
@@ -56,6 +59,7 @@ export const doorStore = defineStore('doorStore', () => {
     door.page = value
     router.push({ name: 'door', query: { page: door.page } })
   }
+  
 
   const allDoor = async (search) => {
     try {
@@ -66,7 +70,6 @@ export const doorStore = defineStore('doorStore', () => {
           title: search,
         },
       })
-      console.log('Door', data)
       door.data = [
         ...data.data.map((item) => {
           return {
@@ -85,7 +88,6 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Door', data)
       data.status = data.status == 'active'
       door.data = [data, ...door.data.slice(0, door.limit - 1)]
       door.count += 1
@@ -98,12 +100,8 @@ export const doorStore = defineStore('doorStore', () => {
 
   const saveDoor = async (payload) => {
     try {
-      loading.setLoading(true)
-      console.log("ketdi payload", payload);
-      
+      loading.setLoading(true) 
       const { data } = await api.put(`${url}`, payload)
-      console.log('Keldi payload', data)
-
       door.data = door.data?.map((item) => {
         if (item?._id == data?._id)
           return {
@@ -146,7 +144,6 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       if (!id) return false
       const { data } = await api.get(`${url}/status/${id}`)
-
       door.data = door.data?.map((item) => {
         if (item?._id == data?._id)
           return {
@@ -161,6 +158,52 @@ export const doorStore = defineStore('doorStore', () => {
     }
   }
 
+  const allSyncedDoorWorker = async (search) => {
+    try {
+      const { data } = await api.get('user-synced-door', {
+        params: {
+          limit: syncedDoorWorker.limit,
+          page: syncedDoorWorker.page,
+          title: search,
+        },
+      })
+      console.log("Synced Door Worker Data", data,search);
+      
+      syncedDoorWorker.data = [
+        ...syncedDoorWorker.data.map((item) => {
+          return {
+            ...item,
+            status: item.status == 'active',
+          }
+        }),
+      ]
+      syncedDoorWorker.count = data?.count
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  const addSyncedWorkerDoor = async (payload) => {
+    try {
+      loading.setLoading(true)
+      const { data } = await api.post('user-synced-door', payload)
+      console.log("Synced Door Worker DataPOST", data, payload);
+      
+      syncedDoorWorker.status = syncedDoorWorker.status == 'active'
+      syncedDoorWorker.data = [data, ...syncedDoorWorker.data.slice(0, door.limit - 1)]
+      syncedDoorWorker.count += 1
+      loading.setLoading(false)
+      notif.setNotif(true, "Добавлена", 'success')
+    } catch (err) {
+      console.warn('Error', err)
+    }
+  }
+
+  // const changeSyncedWorkerDoorPage = (value) => {
+  //   syncedDoorWorker.page = value
+  //   router.push({ name: 'detailDoor', query: { page: syncedDoorWorker.page } })
+  // }
+
   return {
     door,
     allDoor,
@@ -173,6 +216,10 @@ export const doorStore = defineStore('doorStore', () => {
     changePage,
     statusDoor,
     activeDoors,
+    syncedDoorWorker,
+    allSyncedDoorWorker,
+    // changeSyncedWorkerDoorPage,
+    addSyncedWorkerDoor
   }
 })
 

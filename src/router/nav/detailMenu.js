@@ -52,4 +52,6 @@ export const detailMenu = [
       },
     ]
   },
+  // Users
+  
 ]

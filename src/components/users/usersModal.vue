@@ -119,58 +119,23 @@
         </div>
 
         <div class="space-y-4">
-          <!-- <div
-            class="grid grid-cols-[.8fr_1fr_1fr] gap-4 sm:grid-cols-1"
-            v-for="(item, index) of data.workTime"
-            :key="index"
-            v-motion-slide-visible-once-bottom
+          <div
+            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
           >
-            <defaultSelect
-              v-model="item.day"
-              :placeholder="$t('day')"
-              :required="true"
-              :option="weeks"
-              title="name"
-              :label="$t('day')"
-              name="day"
-              :selectedItems="data.workTime"
-            />
-            <timePicker
-              v-model="item.startTime"
-              :label="$t('start')"
-              :name="`startTime${index}`"
-              placeholder="08:00"
-              :required="true"
-            />
-
-            <div class="flex items-center gap-2">
-              <div class="flex-1">
-                <timePicker
-                  v-model="item.endTime"
-                  :label="$t('end')"
-                  :name="`endTime${index}`"
-                  placeholder="16:00"
-                  :required="true"
-                  @send="send"
-                />
-              </div>
-
-              <XMarkIcon
-                v-if="data.workTime.length > 1"
-                class="w-9 h-9 p-1 text-whiteText flex items-center justify-center mt-6 bg-red-500 rounded-md cursor-pointer hover:bg-red-500/80"
-                @click="clearItem(index)"
+            <label
+              v-for="item in door"
+              :key="item._id"
+              class="flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50"
+            >
+              <input
+                type="checkbox"
+                :value="item._id"
+                :checked="data.doors.includes(item._id)"
+                @change="toggleDoor(item._id)"
               />
-
-              <button
-                v-if="data.workTime.length < 7 && index === data.workTime.length - 1"
-                class="w-9 h-9 flex items-center justify-center mt-6 rounded-md text-whiteText cursor-pointer bg-btn hover:bg-btnHover disabled:cursor-not-allowed"
-                @click="updateItems(index)"
-                :disabled="!item.endTime"
-              >
-                <PlusIcon class="w-6 h-6" />
-              </button>
-            </div>
-          </div> -->
+              <span>{{ item.title }}</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -223,25 +188,6 @@ const store = userStore()
 import { notifStore } from '@/stores/helpers/notification'
 const notif = notifStore()
 
-// const clearItem = (index) => {
-//   if (data.value?.workTime?.length > 1) {
-//     data.value.workTime.splice(index, 1)
-//     data.value.workTime = [...data.value.workTime]
-//   }
-// }
-
-// const updateItems = () => {
-//   if (data.value?.workTime?.length < 7) {
-//     const selectedDays = data.value.workTime.map((item) => item.day)
-//     const unselectedDay = weeks.find((week) => !selectedDays.includes(week._id))
-//     if (unselectedDay) {
-//       data.value.workTime = [
-//         ...data.value.workTime,
-//         { day: unselectedDay._id, startTime: '09:00', endTime: '17:00' },
-//       ]
-//     }
-//   }
-// }
 
 import { ref, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -256,13 +202,17 @@ const data = ref({
   gender: '',
   birthDay: '',
   address: '',
-  // workTime: weeks.map((week) => ({
-  //   day: week._id,
-  //   startTime: '09:00',
-  //   endTime: '17:00',
-  // })),
   doors: [],
 })
+
+const toggleDoor = (id) => {
+  const index = data.value.doors.indexOf(id)
+  if (index === -1) {
+    data.value.doors.push(id)
+  } else {
+    data.value.doors.splice(index, 1)
+  }
+}
 
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
@@ -292,11 +242,6 @@ const reset = () => {
     gender: '',
     birthDay: '',
     address: '',
-    // workTime: weeks.map((week) => ({
-    //   day: week._id,
-    //   startTime: '09:00',
-    //   endTime: '17:00',
-    // })),
     doors: [],
   }
   v$.value.$reset()
@@ -307,7 +252,6 @@ const close = () => {
   modal_store.close()
 }
 
-import { formatToISO, formatToTime } from '@/helpers/func'
 
 const send = async () => {
   try {
@@ -333,27 +277,7 @@ const send = async () => {
         }
       }
       const formatDate = formatToISODate(birthDay)
-      // const hasValidEntry = workTime.some(
-      //   (item) => item.day?.length > 0 || item.startTime?.length > 0 || item.endTime?.length > 0,
-      // )
-      // if (!hasValidEntry) {
-      //   notif.setNotif(true, requiredFieldsMessage, 'warning')
-      //   return
-      // }
-
-      // const hasInvalidTime = workTime.some(
-      //   (item) => formatToISO(item.startTime) >= formatToISO(item.endTime),
-      // )
-      // if (hasInvalidTime) {
-      //   notif.setNotif(true, errorTime, 'warning')
-      //   return
-      // }
-
-      // const formattedWorkTime = workTime.map((item) => ({
-      //   ...item,
-      //   startTime: formatToISO(item.startTime),
-      //   endTime: formatToISO(item.endTime),
-      // }))
+console.log('formatDate', formatDate);
 
       const payload = {
         fullName,
@@ -391,7 +315,6 @@ watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getUser(newVal?.id)
     console.log('Put', res.data)
-
     // const formattedTime = res.data.workTime.map((item) => ({
     //   ...item,
     //   startTime: formatToTime(item.startTime),
@@ -402,25 +325,12 @@ watch(modal, async (newVal) => {
     data.value = {
       ...res.data,
       phone: formattedPhone,
+      birthDay: new Date(res.data?.birthDay).toISOString().split('T')[0]
       // workTime: formattedTime,
     }
   }
 })
 
-// Translates
-const requiredFieldsMessage = {
-  en: 'All required fields are not filled!',
-  ru: 'Не все обязательные поля заполнены!',
-  uz: 'Barcha majburiy maydonlar to‘ldirilmagan!',
-  kr: 'Барча мажбурий майдонлар тўлдирилмаган!',
-}
-
-const errorTime = {
-  uz: 'Tugash vaqti boshlanish vaqtidan katta bo‘lishi kerak!',
-  ru: 'Время окончания должно быть больше времени начала!',
-  en: 'The end time must be greater than the start time!',
-  kr: 'Туғаш вақти бошланиш вақтидан катта бўлиши керак!',
-}
 
 const phoneNumberIncompleteMessage = {
   en: 'The phone number is not fully entered!',

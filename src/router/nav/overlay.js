@@ -141,4 +141,14 @@ export const linkMenu = [
       kr: 'Байрамлар',
     },
   },
+  {
+    group: 'detail-setting',
+    to: 'detailDoor',
+    name: {
+      en: 'Detail door',
+      ru: 'Записы',
+      uz: 'Qayd yozuvi',
+      kr: 'Қайд ёзуви',
+    },
+  },
 ]

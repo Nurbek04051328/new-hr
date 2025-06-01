@@ -4,14 +4,14 @@ import { reactive, computed } from 'vue'
 
 const url = '/holiday'
 import { notifStore } from '../helpers/notification'
-const notif = notifStore()
 
 import { loadingStore } from '../helpers/loading'
-const loading = loadingStore()
 
 import { useRouter, useRoute } from 'vue-router'
 
 export const holidayStore = defineStore('holidayStore', () => {
+  const loading = loadingStore()
+  const notif = notifStore()
   const router = useRouter()
   const route = useRoute()
 
