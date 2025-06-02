@@ -118,22 +118,22 @@
           />
         </div>
 
-        <div class="space-y-4">
+        <div class="space-y-4" v-if="door.length > 0">
           <div
             class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
           >
             <label
               v-for="item in door"
-              :key="item._id"
+              :key="item?._id"
               class="flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50"
             >
               <input
                 type="checkbox"
-                :value="item._id"
-                :checked="data.doors.includes(item._id)"
-                @change="toggleDoor(item._id)"
+                :value="item?._id"
+                :checked="Array.isArray(data.doors) && data.doors.includes(item?._id)"
+                @change="toggleDoor(item?._id)"
               />
-              <span>{{ item.title }}</span>
+              <span>{{ item?.title }}</span>
             </label>
           </div>
         </div>
@@ -164,7 +164,7 @@ import phoneInput from '@/assets/helpers/others/phoneInput.vue'
 import { weeks, role, gender } from '@/helpers/object'
 import birthDate from '@/assets/helpers/others/birthDate.vue'
 import multipleSelect from '@/assets/helpers/others/multipleSelect.vue'
-import { formatToISODate } from '@/helpers/func'
+import { formatToISODate, fromDateToClassic } from '@/helpers/func'
 
 
 defineProps({
@@ -227,7 +227,6 @@ const rules = computed(() => ({
   gender: { required },
   birthDay: { required },
   address: { required },
-  doors: data.value.role == 'security' ? { required } : {},
 }))
 const v$ = useVuelidate(rules, data)
 
@@ -277,7 +276,6 @@ const send = async () => {
         }
       }
       const formatDate = formatToISODate(birthDay)
-console.log('formatDate', formatDate);
 
       const payload = {
         fullName,
@@ -315,17 +313,19 @@ watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getUser(newVal?.id)
     console.log('Put', res.data)
+    if (!res?.data) throw new Error('No data received')
     // const formattedTime = res.data.workTime.map((item) => ({
     //   ...item,
     //   startTime: formatToTime(item.startTime),
     //   endTime: formatToTime(item.endTime),
     // }))
 
-    const formattedPhone = `+${res.data.phone}`
+    const formattedPhone = `+${res.data?.phone}`
     data.value = {
       ...res.data,
       phone: formattedPhone,
-      birthDay: new Date(res.data?.birthDay).toISOString().split('T')[0]
+      birthDay: res.data?.birthDay ? fromDateToClassic(res.data?.birthDay) : null,
+      doors: Array.isArray(res.data.doors) ? res.data.doors : []
       // workTime: formattedTime,
     }
   }

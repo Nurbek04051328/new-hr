@@ -23,7 +23,7 @@
             boolen ? 'origin-top-right mb-2 right-0 bottom-full' : 'origin-top-right mt-2 right-0',
           ]"
         >
-          <div class="py-1">
+          <div class="py-1" v-if="edit!=='noEdit'">
             <MenuItem v-slot="{ active }">
               <button
                 type="button"
@@ -82,6 +82,9 @@ defineProps({
   boolen: {
     required: true,
     type: Boolean,
+  },
+  edit: {
+    type: String,
   },
 })
 

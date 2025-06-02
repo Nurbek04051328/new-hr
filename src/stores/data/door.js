@@ -24,6 +24,7 @@ export const doorStore = defineStore('doorStore', () => {
 
   const syncedDoorWorker = reactive({
     data: [],
+    doorInfo: {},
     count: 0,
     limit: 30,
     page: 1,
@@ -158,19 +159,19 @@ export const doorStore = defineStore('doorStore', () => {
     }
   }
 
+  // Detail page
+
   const allSyncedDoorWorker = async (search) => {
     try {
       const { data } = await api.get('user-synced-door', {
         params: {
           limit: syncedDoorWorker.limit,
           page: syncedDoorWorker.page,
-          title: search,
+          ...search,
         },
       })
-      console.log("Synced Door Worker Data", data,search);
-      
       syncedDoorWorker.data = [
-        ...syncedDoorWorker.data.map((item) => {
+        ...data.data.map((item) => {
           return {
             ...item,
             status: item.status == 'active',
@@ -178,6 +179,7 @@ export const doorStore = defineStore('doorStore', () => {
         }),
       ]
       syncedDoorWorker.count = data?.count
+      syncedDoorWorker.doorInfo = data?.doorInfo
     } catch (err) {
       console.warn('Error', err)
     }
@@ -187,8 +189,6 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post('user-synced-door', payload)
-      console.log("Synced Door Worker DataPOST", data, payload);
-      
       syncedDoorWorker.status = syncedDoorWorker.status == 'active'
       syncedDoorWorker.data = [data, ...syncedDoorWorker.data.slice(0, door.limit - 1)]
       syncedDoorWorker.count += 1
@@ -199,10 +199,23 @@ export const doorStore = defineStore('doorStore', () => {
     }
   }
 
-  // const changeSyncedWorkerDoorPage = (value) => {
-  //   syncedDoorWorker.page = value
-  //   router.push({ name: 'detailDoor', query: { page: syncedDoorWorker.page } })
-  // }
+  const removeSyncedWorkerDoor = async (id) => {
+    try {
+      if (!id) return false
+      loading.setLoading(true)
+      await api.delete(`user-synced-door/${id}`)
+      syncedDoorWorker.data = syncedDoorWorker.data?.filter((item) => item?._id !== id)
+      syncedDoorWorker.count -= 1
+      loading.setLoading(false)
+      notif.setNotif(true, doorDeletedMessage, 'info')
+    } catch (err) {
+      console.warn('Error Remove', err)
+    }
+  }
+  const changeSyncedWorkerDoorPage = (value, id) => {
+    syncedDoorWorker.page = value
+    router.push({ name: 'detailDoor', query: { page: syncedDoorWorker.page }, params: { id: id } })
+  }
 
   return {
     door,
@@ -218,8 +231,9 @@ export const doorStore = defineStore('doorStore', () => {
     activeDoors,
     syncedDoorWorker,
     allSyncedDoorWorker,
-    // changeSyncedWorkerDoorPage,
-    addSyncedWorkerDoor
+    changeSyncedWorkerDoorPage,
+    addSyncedWorkerDoor,
+    removeSyncedWorkerDoor
   }
 })
 

@@ -73,6 +73,10 @@ const links = [
     title: 'События'
   },
   {
+    name: 'worker-doors',
+    title: 'Разрешенные двери'
+  },
+  {
     name: 'worker-history',
     title: 'История работы'
   },

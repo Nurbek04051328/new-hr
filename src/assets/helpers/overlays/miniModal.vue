@@ -27,7 +27,7 @@
             <DialogPanel
               :class="[
                 'relative transform rounded-lg px-4 py-5 text-left shadow-xl transition-all w-full max-w-xl bg-modal',
-                'h-fit max-h-[80%] overflow-y-auto mainScroll',
+                'h-fit max-h-[80%]  mainScroll',
               ]"
               v-motion-slide-visible-once-bottom
             >

@@ -1,71 +1,38 @@
 <template>
-  <defaultHeader  />
-  <doorDetailModal :users="users.data" title="Добавьте работника к двери" />
-  <defaultSetting>
-    <headPart name="detailDoor" backLink="door" :newToggleBtn="true" :title="`Страница двери | ${ syncedDoorWorker.doorInfo?.title }`" />
+  <defaultMain>
     <div class="parent" v-if="syncedDoorWorker.count > 0 && !loading.loading">
+      <!-- <pre>{{ syncedDoorWorker.data }}</pre> -->
       <div class="child">
         <div class="tableDiv">
           <table class="table">
             <thead class="thead">
               <tr>
                 <th class="th-first">№</th>
-                <th class="th"></th>
-                <th class="th">{{ $t('fullName') }}</th>
-                <th class="th">{{ $t('department') }}</th>
-                <!-- <th class="th">{{ $t('role') }}</th>
-                <th class="th text-center">Филиал</th> -->
-                <!-- <th class="th text-center">{{ $t('door') }}</th> -->
+                <th class="th">Название</th>
                 <th class="th">{{ $t('date') }}</th>
                 <th class="th"></th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="(item, index) of syncedDoorWorker.data" 
+                v-for="(item, index) of syncedDoorWorker.data"
                 :key="item._id"
                 :class="[index % 2 !== 0 ? 'bg-index2' : '', 'hover:bg-hover']"
               >
                 <td class="td-first">{{ (syncedDoorWorker.page - 1) * syncedDoorWorker.limit + index + 1 }}</td>
                 
-                <td class="td-img">
-                  <div class="size-14 overflow-hidden">
-                    <img
-                    v-if="item?.user?.faceUrl?.length > 0"
-                    :src="`${url}/${item?.user?.faceUrl}`"
-                    alt=""
-                    class="object-contain size-full cursor-pointer"
-                    @click="openFaceBox(item?.user?.faceUrl, $event)"
-                    />
-                    <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
-                  </div>
-                </td>
-                <td class="td-second">{{ item.user?.fullName || '' }}</td>
-                <td class="td">{{ item?.user?.department?.name || '' }}</td>
-                <!-- <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
-                <td class="td text-center">
-                  {{ item.door?.branch?.title || '' }}
-                </td> -->
-                <!-- <td class="td text-center">
-                  <div>
-                    <div>{{ item.door?.title || '' }}</div>
-                    <div 
-                      class="text-sm"
-                      :class="item?.action === 'exit' ? 'text-redColor' : item?.action === 'enter' ? 'text-greenColor' : ''" 
-                    >{{ getDoorTypeName(item?.action, $i18n.locale) || '' }}</div>
-                  </div>
-                </td> -->
+                <td class="td-second">{{ item?.door?.title || '' }}</td>
                 <td class="td">
-                  <div>
+                  <span class="mr-3">
                     {{ convertDateShort(item?.time)}}
-                  </div>
-                  <div class="text-sm ">
+                  </span>
+                  <span class="text-sm ">
                     {{ convertDateShort(item?.time, 'hour-second')}}
-                  </div>
+                  </span>
                 </td>
                 <td class="td-last">
                   <dropdownPage
-                    name="detailDoor"
+                    name="worker-doors"
                     edit = 'noEdit'
                     :id="item?._id"
                     :boolen="
@@ -96,23 +63,20 @@
       :select="selectedLimit"
       @update-limit="updateLimit"
     />
-  </defaultSetting>
+  </defaultMain>
 </template>
 
 <script setup>
-import defaultSetting from '@/setting/defaultSetting.vue'
+import defaultMain from '@/views/home/defaultMain.vue'
+import { ArrowPathIcon, XMarkIcon, MagnifyingGlassIcon, UserIcon } from '@heroicons/vue/24/outline';
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
-import defaultHeader from '@/views/home/defaultHeader.vue'
+import dropdownPage from '@/assets/table/dropdownPage.vue'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
-import dropdownPage from '@/assets/table/dropdownPage.vue'
 import { url } from '@/helpers/api'
-import { typeDoor } from '@/helpers/object'
-import { role } from '@/helpers/object';
 import { convertDateShort } from '@/helpers/func';
 import VueEasyLightbox from 'vue-easy-lightbox';
-import doorDetailModal from './doorDetailPageModal.vue'
 
 import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -121,10 +85,9 @@ import { doorStore } from '@/stores/data/door'
 const store = doorStore()
 const { syncedDoorWorker } = storeToRefs(store)
 
-
 import { userStore } from '@/stores/data/users'
 const user_store = userStore()
-const { users } = storeToRefs(user_store)
+
 
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()
@@ -133,10 +96,8 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
-
 import { removeStore } from '@/stores/helpers/remove'
 const remove = removeStore()
-
 
 const changePage = (value) => {
   store.changeSyncedWorkerDoorPage(value, route.params.id)
@@ -167,7 +128,7 @@ const updateLimit = async (value) => {
 const getData = async () => {
   try {
     loading.setLoading(true)
-    await Promise.all([store.allSyncedDoorWorker({door:route.params.id}), user_store.allUsers()])
+    await Promise.all([store.allSyncedDoorWorker({user:route.params.id}), user_store.allUsers()])
     loading.setLoading(false)
   } catch (err) {
     console.warn('Error', err)
@@ -199,7 +160,6 @@ const closeLightbox = () => {
   visible.value = false;
   currentImage.value = '';
 };
-
 
 
 const removeItem = async () => {

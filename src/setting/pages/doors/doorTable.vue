@@ -22,10 +22,15 @@
               v-for="(item, index) of door"
               :key="item?._id"
               :class="[index % 2 !== 0 ? 'bg-index2' : '', 'hover:bg-hover cursor-pointer']"
-              @click="item?._id && $router.push({ name: 'detailDoor', params: { id: item?._id } })"
+              
             >
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
-              <td class="td-second">{{ item?.branch?.title }}</td>
+              <td 
+                class="td-second" 
+                @click="item?._id && $router.push({ name: 'detailDoor', params: { id: item?._id } })" 
+              >
+                {{ item?.branch?.title }}
+              </td>
               <td class="td-second">{{ item?.title }}</td>
               <td class="td">
                 <a target="_blank" :href="`http://${item?.ip}:${item?.port}`">{{ item?.ip }}</a>

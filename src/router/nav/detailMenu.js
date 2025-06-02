@@ -50,6 +50,19 @@ export const detailMenu = [
           }
         }
       },
+      {
+        path: 'worker-doors',
+        name: 'worker-doors',
+        component: () => import('@/components/users/userSyncedDoor.vue'),
+        meta: {
+          active: 'workers',
+          group: 'main',
+          title: {
+            en: 'History doors',
+            ru: 'Разрешенные двери',
+          }
+        }
+      },
     ]
   },
   // Users

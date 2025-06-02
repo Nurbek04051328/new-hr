@@ -1,122 +1,72 @@
 <template>
-
-  <defaultHeader  />
+  <defaultHeader />
   <defaultMain>
-    <headPart name="event" :newToggleBtn="false" :count="event.count">
+    <headPart name="logger" :newToggleBtn="false">
+      <div class="flex gap-2">
+        <button
+          :class="[
+            'btn',
+            logger.state.type === 'router' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+          ]"
+          @click="changeType('router')"
+        >
+          Logger Router
+        </button>
+        <button
+          :class="[
+            'btn',
+            logger.state.type === 'door' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+          ]"
+          @click="changeType('door')"
+        >
+          Logger Door
+        </button>
+      </div>
     </headPart>
 
-    <eventTable
-      :events="event.data"
-      :count="event.count"
-      :limit="event.limit"
-      :page="event.page"
+    <component
+      :is="logger.state.type === 'router' ? 'childLoggerRouter' : 'childLoggerDoor'"
     />
 
     <paginationPage
-      v-model="store.event.page"
-      :count="event.count"
-      :limit="event.limit"
+      v-model="logger.state.page"
+      :count="logger.state.count"
+      :limit="logger.state.limit"
       @change-page="changePage"
-      :select="selectedLimit"
       @update-limit="updateLimit"
     />
   </defaultMain>
 </template>
-<script setup>
 
+<script setup>
 import defaultHeader from '@/views/home/defaultHeader.vue'
 import defaultMain from '@/views/home/defaultMain.vue'
-
-import eventTable from './eventTable.vue'
-
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 
+import childLoggerRouter from './childLoggerRouter.vue'
+import childLoggerDoor from './childLoggerDoor.vue'
 
-import { onMounted, ref, watch } from 'vue'
-import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
+import { loggerStore } from '@/stores/data/logger'
+const logger = loggerStore()
 
-import { eventStore } from '@/stores/data/event'
-const store = eventStore()
-const { event } = storeToRefs(store)
-
-import { userStore } from '@/stores/data/users'
-const user_store = userStore()
-
-import { departmentStore } from '@/stores/data/department'
-const department = departmentStore()
-
-import { branchStore } from '@/stores/data/branch'
-const branch = branchStore()
-
-import { loadingStore } from '@/stores/helpers/loading'
-const loading = loadingStore()
-
-
-import { useRoute, useRouter } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
-
-
-
-
-
-watch(search, async (newVal) => {
-  if (!newVal) {
-    await store.allEvent()
-  }
-})
-
-const changePage = (value) => {
-  store.changePage(value)
-  getData()
+const changePage = (val) => {
+  logger.changePage(val)
+  logger.getLoggerData()
 }
 
-
-
-
-
-const selectedLimit = ref(event.value.limit)
-
-const updateLimit = async (value) => {
-  event.value.limit = value || selectedLimit.value
-  getData()
-  if (event.value.page > 1) {
-    event.value.page = 1
-    route.query.page = 1
-    getData()
-  }
-  const newQuery = { ...route.query }
-  if (value !== 30) {
-    newQuery.limit = value
-  } else {
-    delete newQuery.limit
-  }
-  router.replace({ query: newQuery })
+const updateLimit = (val) => {
+  logger.updateLimit(val)
+  logger.getLoggerData()
 }
 
-
-
-
-
-
-const getData = async () => {
-  try {
-    loading.setLoading(true)
-    await Promise.all([store.allEvent(searchEventData.value), department.allDepartment(), branch.allBranch(), user_store.allUsers()])
-    loading.setLoading(false)
-  } catch (err) {
-    console.warn('Error', err)
-  }
+const changeType = (type) => {
+  logger.setType(type)
+  logger.getLoggerData()
 }
 
 onMounted(() => {
-  if (route.query.limit) {
-    selectedLimit.value = Number(route.query.limit)
-    event.value.limit = selectedLimit.value
-  }
-  store.event.page = +route.query.page || 1
-  getData()
+  logger.getLoggerData()
 })
-
 </script>
