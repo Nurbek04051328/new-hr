@@ -24,7 +24,14 @@
               <td class="td-second">{{ item?.title }}</td>
               <td class="td-second">{{ item?.description }}</td>
               <td class="td">
-                <checkboxPage v-model="item.status" @click="store.statusBranch(item._id)" />
+                <!-- <checkboxPage v-model="item.status" @click="store.statusBranch(item._id)" /> -->
+                <checkboxPage 
+                  :modelValue="item.status === 'active'"
+                  @update:modelValue="val => {
+                    item.status = val ? 'active' : 'inactive'
+                    store.statusBranch(item._id)
+                  }" 
+                />
               </td>
               <td class="td">
                 {{ convertDateShort(item?.createdAt) }}

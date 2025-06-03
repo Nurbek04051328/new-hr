@@ -54,7 +54,7 @@ export const departmentStore = defineStore('departmentStore', () => {
       department.data = [
         ...department.data,
         ...data.data.map((item) => {
-          return { ...item, status: item.status == 'active' }
+          return { ...item, status: item.status }
         }),
       ]
     } else {
@@ -81,7 +81,7 @@ export const departmentStore = defineStore('departmentStore', () => {
         ...data.data.map((item) => {
           return {
             ...item,
-            status: item.status == 'active',
+            status: item.status,
           }
         }),
       ]
@@ -159,7 +159,7 @@ export const departmentStore = defineStore('departmentStore', () => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status,
           }
         return item
       })

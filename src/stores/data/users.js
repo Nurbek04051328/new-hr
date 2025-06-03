@@ -41,7 +41,7 @@ export const userStore = defineStore('userStore', () => {
       users.data = [
         ...users.data,
         ...data.data.map((item) => {
-          return { ...item, status: item.status == 'active' }
+          return { ...item, status: item.status }
         }),
       ]
     } else {
@@ -74,7 +74,7 @@ export const userStore = defineStore('userStore', () => {
         ...data.data.map((item) => {
           return {
             ...item,
-            status: item.status == 'active',
+            status: item.status,
           }
         }),
       ]
@@ -91,7 +91,7 @@ export const userStore = defineStore('userStore', () => {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
       
-      data.status = data.status == 'active'
+      data.status = data.status
       users.data = [data, ...users.data.slice(0, users.limit - 1)]
       users.count += 1
       loading.setLoading(false)
@@ -113,7 +113,7 @@ export const userStore = defineStore('userStore', () => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status,
           }
         return item
       })
@@ -216,7 +216,7 @@ export const userStore = defineStore('userStore', () => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status,
           }
         return item
       })

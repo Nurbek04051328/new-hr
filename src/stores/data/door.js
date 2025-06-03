@@ -63,22 +63,19 @@ export const doorStore = defineStore('doorStore', () => {
   
 
   const allDoor = async (search) => {
+    console.log("searchDoor", search);
+    
     try {
       const { data } = await api.get(url, {
         params: {
           limit: door.limit,
           page: door.page,
-          title: search,
+          ... search,
         },
       })
-      door.data = [
-        ...data.data.map((item) => {
-          return {
-            ...item,
-            status: item.status == 'active',
-          }
-        }),
-      ]
+      door.data = [...data.data]
+      console.log("Door Data", door.data);
+      
       door.count = data?.count
     } catch (err) {
       console.warn('Error', err)
@@ -143,13 +140,17 @@ export const doorStore = defineStore('doorStore', () => {
 
   const statusDoor = async (id) => {
     try {
+      console.log("Status Door ID", id);
+      
       if (!id) return false
       const { data } = await api.get(`${url}/status/${id}`)
+      console.log("Status Data", data);
+      
       door.data = door.data?.map((item) => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status
           }
         return item
       })

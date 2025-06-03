@@ -125,7 +125,7 @@
             <label
               v-for="item in door"
               :key="item?._id"
-              class="flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50"
+              class="flex items-center space-x-2 p-2 border rounded cursor-pointer text-mainText"
             >
               <input
                 type="checkbox"

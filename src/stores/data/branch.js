@@ -40,7 +40,7 @@ export const branchStore = defineStore('branchStore', () => {
         ...data.data.map((item) => {
           return {
             ...item,
-            status: item.status == 'active',
+            status: item.status,
           }
         }),
       ]
@@ -68,7 +68,7 @@ export const branchStore = defineStore('branchStore', () => {
         ...data.data.map((item) => {
           return {
             ...item,
-            status: item.status == 'active',
+            status: item.status,
           }
         }),
       ]
@@ -143,12 +143,13 @@ export const branchStore = defineStore('branchStore', () => {
     try {
       if (!id) return false
       const { data } = await api.get(`${url}/status/${id}`)
+      console.log("branchdata", data);
 
       branch.data = branch.data?.map((item) => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status,
           }
         return item
       })

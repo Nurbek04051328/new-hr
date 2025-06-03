@@ -1,5 +1,5 @@
 <template>
-  <usersModal :department="d_store.activeDepartment" :door="door_store.activeDoors" />
+  <usersModal :department="d_store.activeDepartment" :door="door_store.door.data" />
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
@@ -144,7 +144,7 @@ const clearSearch = async () => {
 const getData = async () => {
   try {
     loading.setLoading(true)
-    await Promise.all([store.allUsers(), d_store.allDepartment(), door_store.allDoor()])
+    await Promise.all([store.allUsers(), d_store.allDepartment(), door_store.allDoor({status: 'active', doorStatus:'online'})])
     loading.setLoading(false)
   } catch (err) {
     console.warn('Error', err)

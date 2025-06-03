@@ -25,7 +25,13 @@
               <!-- <td class="td">{{ item.parent?.name || '' }}</td> -->
               <td class="td">{{ item.chief?.fullName || '' }}</td>
               <td class="td">
-                <checkboxPage v-model="item.status" @click="store.statusDepartment(item._id)" />
+                <checkboxPage 
+                  :modelValue="item.status === 'active'"
+                  @update:modelValue="val => {
+                    item.status = val ? 'active' : 'inactive'
+                    store.statusDepartment(item._id)
+                  }" 
+                />
               </td>
               <td class="td-last">
                 <dropdownPage

@@ -41,7 +41,13 @@
                 {{ item?.type?.toUpperCase() || '' }}
               </td>
               <td class="td">
-                <checkboxPage v-model="item.status" @click="store.statusDoor(item?._id)" />
+                <checkboxPage 
+                  :modelValue="item.status === 'active'"
+                  @update:modelValue="val => {
+                    item.status = val ? 'active' : 'inactive'
+                    store.statusDoor(item._id)
+                  }" 
+                />
               </td>
               <td class="td-last">
                 <dropdownPage

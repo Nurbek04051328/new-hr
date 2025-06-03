@@ -49,7 +49,13 @@
               @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
               >{{ getRoleName(item?.role, $i18n.locale) || '' }}</td>
               <td class="td">
-                <checkboxPage v-model="item.status" @click="store.statusUser(item._id)" />
+                <checkboxPage 
+                  :modelValue="item.status === 'active'"
+                  @update:modelValue="val => {
+                    item.status = val ? 'active' : 'inactive'
+                    store.statusUser(item._id)
+                  }" 
+                />
               </td>
               <td class="td-last">
                 <dropdownPage

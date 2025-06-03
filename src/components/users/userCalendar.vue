@@ -40,8 +40,8 @@
       <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
         <div class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
           <button
-            v-for="day in days"
-            :key="day.date + day.day"
+            v-for="(day, idx) in days" 
+            :key="day.date ? day.date + day.day : 'empty-' + idx"
             type="button"
             @click="openModal(day)"
             :class="[
@@ -232,11 +232,11 @@ function getStatusClass(status) {
 
 const fillDays = (data, year, month) => {
   // month - 0-based (0 = yanvar)
-  const firstDay = new Date(year, month, 1)
+  const firstDay = new Date(year, Number(month), 1)
   let startDayOfWeek = firstDay.getDay()
-  if (startDayOfWeek === 0) startDayOfWeek = 7 // Yakshanba -> 7
+  startDayOfWeek = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1
   const daysArr = []
-  for (let i = 1; i < startDayOfWeek; i++) {
+  for (let i = 0; i < startDayOfWeek; i++) {
     daysArr.push({
       date: '',
       day: '',
@@ -256,6 +256,7 @@ const fillDays = (data, year, month) => {
     const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
     const dd = String(dateObj.getDate()).padStart(2, '0')
     const dateStr = `${yyyy}-${mm}-${dd}`
+    console.log("CHECK DATE:", item.day, new Date(year, Number(month), item.day).toDateString())
 
     daysArr.push({
       date: dateStr,
@@ -282,6 +283,8 @@ const fillDays = (data, year, month) => {
       reason:''
     })
   }
+  console.log("daysArr", daysArr);
+  
   days.value = daysArr
 }
 
@@ -290,7 +293,6 @@ const fillDays = (data, year, month) => {
 
 const getData = async () => {
   if (!id.value) return
-  console.log("ssss",selectedMonth.value);
   const params = { _id: id.value }
   if (selectedMonth.value !== '' && selectedMonth.value !== null && selectedMonth.value !== undefined) {
     params.month = selectedMonth.value
@@ -298,15 +300,11 @@ const getData = async () => {
   if (selectedYear.value !== '' && selectedYear.value !== null && selectedYear.value !== undefined) {
     params.year = selectedYear.value
   }
-  console.log(params);
-  
   workerCalendar.value = await store.getWorkdayCalendar(params)
   await door_store.allDoor()
-  console.log("workercalendar", workerCalendar.value);
-  
   const { data, year, month } = workerCalendar.value
   if (data && year !== undefined && month !== undefined) {
-    fillDays(data, year, month)
+    fillDays(data, Number(year), Number(month))
     calendarTitle.value = `${monthNames[month]} ${year}`
   }
 }
