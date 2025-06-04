@@ -33,7 +33,7 @@ export const reasonStore = defineStore('reasonStore', () => {
         page: reason.limit,
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (reason.count >= route?.query?.limit ? route?.query?.limit : reason.limit) {
       reason.data = [
@@ -64,7 +64,7 @@ export const reasonStore = defineStore('reasonStore', () => {
           title: search,
         },
       })
-      console.log('reason', data)
+      // console.log('reason', data)
       reason.data = [
         ...data.data.map((item) => {
           return {
@@ -83,7 +83,7 @@ export const reasonStore = defineStore('reasonStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Reason', data)
+      // console.log('Created Reason', data)
       data.status = data.status == 'active'
       reason.data = [data, ...reason.data.slice(0, reason.limit - 1)]
       reason.count += 1
@@ -97,10 +97,10 @@ export const reasonStore = defineStore('reasonStore', () => {
   const saveReason = async (payload) => {
     try {
       loading.setLoading(true)
-      console.log("ketdi payload", payload);
+      // console.log("ketdi payload", payload);
       
       const { data } = await api.put(`${url}`, payload)
-      console.log('Keldi payload', data)
+      // console.log('Keldi payload', data)
 
       reason.data = reason.data?.map((item) => {
         if (item?._id == data?._id)

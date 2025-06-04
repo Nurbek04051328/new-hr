@@ -177,7 +177,7 @@ watch(modal, async (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getDoor(newVal?.id)
-    console.log(res.data)
+    // console.log(res.data)
 
     data.value = {
       ...res.data,
@@ -211,7 +211,7 @@ const send = async () => {
         notif.setNotif(true, ipFormatMessage, 'warning')
         return
       }
-      console.log("ikkinchi tekshiriuv");
+      // console.log("ikkinchi tekshiriuv");
       
       const payload = {
         branch,
@@ -223,7 +223,7 @@ const send = async () => {
         port,
         isOpen,
       }
-      console.log('Payload', payload)
+      // console.log('Payload', payload)
       if (!v$.value.$invalid) {
         if (modal_store.modal?.id?.length > 0) {
           await store.saveDoor({ _id, ...payload })

@@ -13,9 +13,7 @@
                 <th class="th"></th>
                 <th class="th">{{ $t('fullName') }}</th>
                 <th class="th">{{ $t('department') }}</th>
-                <!-- <th class="th">{{ $t('role') }}</th>
-                <th class="th text-center">Филиал</th> -->
-                <!-- <th class="th text-center">{{ $t('door') }}</th> -->
+                <th class="th">Статус</th>
                 <th class="th">{{ $t('date') }}</th>
                 <th class="th"></th>
               </tr>
@@ -42,26 +40,27 @@
                 </td>
                 <td class="td-second">{{ item.user?.fullName || '' }}</td>
                 <td class="td">{{ item?.user?.department?.name || '' }}</td>
-                <!-- <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
-                <td class="td text-center">
-                  {{ item.door?.branch?.title || '' }}
-                </td> -->
-                <!-- <td class="td text-center">
-                  <div>
-                    <div>{{ item.door?.title || '' }}</div>
-                    <div 
-                      class="text-sm"
-                      :class="item?.action === 'exit' ? 'text-redColor' : item?.action === 'enter' ? 'text-greenColor' : ''" 
-                    >{{ getDoorTypeName(item?.action, $i18n.locale) || '' }}</div>
-                  </div>
-                </td> -->
                 <td class="td">
-                  <div>
+                  <button
+                    :disabled="item.status === 'success'"
+                    @click="handleClick(item)"
+                    class="px-3 py-1 rounded text-white"
+                    :class="{
+                      'bg-green-500 cursor-not-allowed': item.status === 'success',
+                      'bg-yellow-500 hover:bg-yellow-600': item.status === 'pending',
+                      'bg-red-500 hover:bg-red-600': item.status === 'error'
+                    }"
+                  >
+                    {{ item?.status == 'success'? 'Успешно': item?.status == 'pending'? 'В ожидании' : 'Ошибка' }}
+                  </button>
+                </td>
+                <td class="td">
+                  <span class="mr-3">
                     {{ convertDateShort(item?.time)}}
-                  </div>
-                  <div class="text-sm ">
+                  </span>
+                  <span class="text-sm ">
                     {{ convertDateShort(item?.time, 'hour-second')}}
-                  </div>
+                  </span>
                 </td>
                 <td class="td-last">
                   <dropdownPage
@@ -107,6 +106,7 @@ import defaultHeader from '@/views/home/defaultHeader.vue'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
 import dropdownPage from '@/assets/table/dropdownPage.vue'
+import { UserIcon } from '@heroicons/vue/24/outline';
 import { url } from '@/helpers/api'
 import { typeDoor } from '@/helpers/object'
 import { role } from '@/helpers/object';
@@ -182,6 +182,14 @@ onMounted(() => {
   store.syncedDoorWorker.page = +route.query.page || 1
   getData()
 })
+
+
+const handleClick = async(item) => {
+  if (item.status === 'pending' || item.status === 'error') {
+    await store.returnSyncedWorkerDoor(item._id);
+  }
+}
+
 
 
 

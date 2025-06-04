@@ -34,7 +34,7 @@ export const eventStore = defineStore('eventStore', () => {
           ...search
         },
       })
-      console.log('event', data)
+      // console.log('event', data)
       event.data = [...data.data]
       event.count = data?.count
     } catch (err) {
@@ -49,7 +49,7 @@ export const eventStore = defineStore('eventStore', () => {
           page: 1,
         },
       })
-      console.log('socketEvent', data)
+      // console.log('socketEvent', data)
       event.data = [...data.data, ...event.data]
       event.count += data.data.length
     } catch (err) {
@@ -82,13 +82,13 @@ export const eventStore = defineStore('eventStore', () => {
 
   const syncEvent = async (payload) => {
     try {
-      console.log("payload", payload);
-      console.log(`${url}/sync`);
+      // console.log("payload", payload);
+      // console.log(`${url}/sync`);
       
       
       // loading.setLoading(true)
       const { data } = await api.post(`${url}/sync`, payload)
-      console.log("data", data);
+      // console.log("data", data);
       
       // loading.setLoading(false)
       if(data) notif.setNotif(true, sinxrStartMessage, 'success')

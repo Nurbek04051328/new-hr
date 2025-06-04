@@ -68,7 +68,7 @@ const close = () => {
 const syncData = async () => {
   try {
     loading.setLoading(true); 
-    console.log("date.value", date.value);
+    // console.log("date.value", date.value);
     
     await store.syncEvent({
       start: date.value[0] ? date.value[0].toISOString() : null,

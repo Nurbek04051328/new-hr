@@ -85,7 +85,7 @@ watch(modal, async (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getBranch(newVal?.id)
-    console.log(res.data)
+    // console.log(res.data)
 
     data.value = {
       ...res.data,
@@ -106,7 +106,7 @@ const send = async () => {
         title,
         description,
       }
-      console.log('Payload', payload)
+      // console.log('Payload', payload)
       if (!v$.value.$invalid) {
         if (modal_store.modal?.id?.length > 0) {
           await store.saveBranch({ _id, ...payload })

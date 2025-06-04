@@ -49,7 +49,7 @@ export const statisticStore = defineStore('statisticStore', () => {
   const getHomeLastInfo = async () => {
     try {
       const {data} = await api.get(`${url}/home/events-count`)
-      console.log("data", data);
+      // console.log("data", data);
       
       return data
     } catch (err) {
@@ -59,7 +59,7 @@ export const statisticStore = defineStore('statisticStore', () => {
   const getHomeLastEventsInfo = async () => {
     try {
       const {data} = await api.get(`${url}/home/last-events`)
-      console.log("data", data);
+      // console.log("data", data);
       
       return data
     } catch (err) {

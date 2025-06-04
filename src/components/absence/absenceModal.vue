@@ -138,7 +138,7 @@ watch(modal, async (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getAbsence(newVal?.id)
-    console.log(res.data)
+    // console.log(res.data)
 
     data.value = {
       ...res.data,

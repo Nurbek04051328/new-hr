@@ -76,7 +76,7 @@ watch(search, async (newVal) => {
 
 const selectedLimit = ref(department.value.limit)
 const updateLimit = (value) => {
-  console.log(value)
+  // console.log(value)
 
   department.value.limit = value || selectedLimit.value
   getData()

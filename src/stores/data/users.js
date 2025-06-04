@@ -35,7 +35,7 @@ export const userStore = defineStore('userStore', () => {
         page: users.limit,
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (users.count >= route?.query?.limit ? route?.query?.limit : users.limit) {
       users.data = [
@@ -85,7 +85,7 @@ export const userStore = defineStore('userStore', () => {
   }
 
   const addUser = async (payload) => {
-    console.log('Payload', payload)
+    // console.log('Payload', payload)
 
     try {
       loading.setLoading(true)
@@ -102,12 +102,12 @@ export const userStore = defineStore('userStore', () => {
   }
 
   const saveUser = async (payload) => {
-    console.log('Payload', payload)
+    // console.log('Payload', payload)
 
     try {
       loading.setLoading(true)
       const { data } = await api.put(url, payload)
-      console.log('Save User', data)
+      // console.log('Save User', data)
 
       users.data = users.data?.map((item) => {
         if (item?._id == data?._id)
@@ -164,7 +164,7 @@ export const userStore = defineStore('userStore', () => {
   const getOneWorkdayCalendar = async (id) => {
     try {
       const { data } = await api.get(`${url}/calendar/${id}`)
-      console.log('One Workday Calendar', data);
+      // console.log('One Workday Calendar', data);
       return data
     } catch (err) {
       console.warn('Error', err)
@@ -174,10 +174,10 @@ export const userStore = defineStore('userStore', () => {
   const saveUserCalendar = async (payload) => {
       try {
         loading.setLoading(true)
-        console.log("ketdi payload", payload);
+        // console.log("ketdi payload", payload);
         
         const { data } = await api.put(`${url}/calendar`, payload)
-        console.log('Keldi payload', data)
+        // console.log('Keldi payload', data)
   
         return data
         loading.setLoading(false)

@@ -47,7 +47,7 @@ const getData = async () => {
     loading.setLoading(true)
     lastStatistic.value = await store.getHomeLastEventsInfo()
     countAllEvent.value = await store.getHomeLastInfo()
-    console.log("lastStatistic", lastStatistic.value);
+    // console.log("lastStatistic", lastStatistic.value);
     
     loading.setLoading(false)
   } catch (err) {

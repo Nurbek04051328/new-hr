@@ -17,8 +17,8 @@
         <div
           v-if="notif.show"
           :class="[
-            'pointer-events-auto relative flex items-start flex-col w-[285px] sm:w-[200px] overflow-hidden rounded-lg shadow-lg ring-1 ring-opacity-5 p-4 bg-modal ring-border',
-            notif.type == 'danger' ? 'bg-red-400 ring-red-500' : '',
+            'pointer-events-auto relative flex items-start flex-col max-w-sm w-full overflow-hidden rounded-lg shadow-lg ring-1 ring-opacity-5 p-4 bg-modal ring-border break-words',
+            notif.type == 'danger' ? 'bg-red-400 ring-red-500' : ''
           ]"
           v-motion-slide-visible-once-bottom
         >

@@ -210,7 +210,7 @@ async function fetchCalendarData(id) {
   }
   loading.value = true
   const data = await store.getOneWorkdayCalendar(id)
-  console.log("dataTanlangan", data);
+  // console.log("dataTanlangan", data);
   
   calendarData.value = { ...data }
   if( data.dayStatus === 'workday' || data.dayStatus === 'weekend') {

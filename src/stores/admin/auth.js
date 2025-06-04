@@ -49,11 +49,11 @@ export const authStore = defineStore('authStore', () => {
   }
 
   const login = async (payload) => {
-    console.log('Payload', payload)
+    // console.log('Payload', payload)
 
     try {
       const { data } = await api.post('/auth/login', payload)
-      console.log('DATA', data?.user)
+      // console.log('DATA', data?.user)
 
       cookies.set('access-token', data?.accessToken)
       cookies.set('refresh-token', data?.refreshToken)

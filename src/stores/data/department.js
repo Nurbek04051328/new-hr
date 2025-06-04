@@ -33,7 +33,7 @@ export const departmentStore = defineStore('departmentStore', () => {
       const { data } = await api.get(url, {
         
       })
-      console.log('Parent', data)
+      // console.log('Parent', data)
 
       department.parent = [...data.data]
     } catch (err) {
@@ -48,7 +48,7 @@ export const departmentStore = defineStore('departmentStore', () => {
         page: department.limit,
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (department.count >= route?.query?.limit ? route?.query?.limit : department.limit) {
       department.data = [
@@ -76,7 +76,7 @@ export const departmentStore = defineStore('departmentStore', () => {
           name: search,
         },
       })
-      console.log('Department', data)
+      // console.log('Department', data)
       department.data = [
         ...data.data.map((item) => {
           return {
@@ -95,7 +95,7 @@ export const departmentStore = defineStore('departmentStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Department', data)
+      // console.log('Created Department', data)
       data.status = data.status == 'active'
       department.data = [data, ...department.data.slice(0, department.limit - 1)]
       department.count += 1
@@ -110,7 +110,7 @@ export const departmentStore = defineStore('departmentStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.put(`${url}`, payload)
-      console.log('Save Department', data)
+      // console.log('Save Department', data)
 
       department.data = department.data?.map((item) => {
         if (item?._id == data?._id)

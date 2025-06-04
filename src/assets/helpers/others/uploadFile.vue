@@ -213,7 +213,7 @@ const uploadFile = async (file) => {
 }
 
 const removeFile = () => {
-  console.log('Removed')
+  // console.log('Removed')
   model.value = ''
   fileName.value = ''
   fileSize.value = 0

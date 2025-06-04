@@ -33,7 +33,7 @@ export const absenceStore = defineStore('absenceStore', () => {
         page: absence.limit,
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (absence.count >= route?.query?.limit ? route?.query?.limit : absence.limit) {
       absence.data = [
@@ -61,7 +61,7 @@ export const absenceStore = defineStore('absenceStore', () => {
       params.page = absence.page
 
       const { data } = await api.get(url, {params})
-      console.log('absence', data)
+      // console.log('absence', data)
       absence.data = [
         ...data.data.map((item) => {
           return {
@@ -80,7 +80,7 @@ export const absenceStore = defineStore('absenceStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Absence', data)
+      // console.log('Created Absence', data)
       data.status = data.status == 'active'
       absence.data = [data, ...absence.data.slice(0, absence.limit - 1)]
       absence.count += 1
@@ -94,10 +94,10 @@ export const absenceStore = defineStore('absenceStore', () => {
   const saveAbsence = async (payload) => {
     try {
       loading.setLoading(true)
-      console.log("ketdi payload", payload);
+      // console.log("ketdi payload", payload);
       
       const { data } = await api.put(`${url}`, payload)
-      console.log('Keldi payload', data)
+      // console.log('Keldi payload', data)
 
       absence.data = absence.data?.map((item) => {
         if (item?._id == data?._id)

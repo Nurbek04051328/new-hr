@@ -17,7 +17,7 @@ export const modalStore = defineStore('modalStore', () => {
   })
 
   const setModal = (show, name, id, lang) => {
-    console.log('setModal', show, name, id, lang);
+    // console.log('setModal', show, name, id, lang);
     
     if (route?.name === name) {
       if (id?.length > 0) {

@@ -33,7 +33,7 @@ export const holidayStore = defineStore('holidayStore', () => {
         page: holiday.limit,
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (holiday.count >= route?.query?.limit ? route?.query?.limit : holiday.limit) {
       holiday.data = [
@@ -64,7 +64,7 @@ export const holidayStore = defineStore('holidayStore', () => {
           title: search,
         },
       })
-      console.log('holiday', data)
+      // console.log('holiday', data)
       holiday.data = [
         ...data.data.map((item) => {
           return {
@@ -83,7 +83,7 @@ export const holidayStore = defineStore('holidayStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created Holiday', data)
+      // console.log('Created Holiday', data)
       data.status = data.status == 'active'
       holiday.data = [data, ...holiday.data.slice(0, holiday.limit - 1)]
       holiday.count += 1
@@ -97,10 +97,10 @@ export const holidayStore = defineStore('holidayStore', () => {
   const saveHoliday = async (payload) => {
     try {
       loading.setLoading(true)
-      console.log("ketdi payload", payload);
+      // console.log("ketdi payload", payload);
       
       const { data } = await api.put(`${url}`, payload)
-      console.log('Keldi payload', data)
+      // console.log('Keldi payload', data)
 
       holiday.data = holiday.data?.map((item) => {
         if (item?._id == data?._id)

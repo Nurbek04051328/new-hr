@@ -113,7 +113,7 @@ watch(modal, async (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getWorker(newVal?.id)
-    console.log(res.data)
+    // console.log(res.data)
 
     data.value = {
       ...res.data,
@@ -125,12 +125,12 @@ watch(modal, async (newVal) => {
 
 
 const send = async () => {
-  console.log("clickkk");
+  // console.log("clickkk");
   
   try {
     v$.value.$touch()
     const { company, staffPosition, enterDate, leaveDate, comment, _id } = data.value
-console.log("clickkk2222");
+// console.log("clickkk2222");
     if (!v$.value.$invalid) {
       
       const payload = {
@@ -142,7 +142,7 @@ console.log("clickkk2222");
         comment,
       }
       if (!v$.value.$invalid) {
-        console.log("clickkk3333");
+        // console.log("clickkk3333");
         if (modal_store.modal?.id?.length > 0) {
           await store.saveWorker({ _id, ...payload })
         } else {

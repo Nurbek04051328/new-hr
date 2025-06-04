@@ -9,6 +9,7 @@
               <th class="th">{{ $t('photo') }}</th>
               <th class="th">{{ $t('fullName') }}</th>
               <th class="th">{{ $t('department') }}</th>
+              <!-- <th class="th">Номер</th> -->
               <th class="th">{{ $t('role') }}</th>
               <th class="th">{{ $t('status') }}</th>
               <th class="th-last"></th>

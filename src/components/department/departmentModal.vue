@@ -279,7 +279,7 @@ watch(modal, (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await department.getDepartment(newVal?.id)
-    console.log(res.data)
+    // console.log(res.data)
 
     const formattedTime = res.data.workTime.map((item) => ({
       ...item,

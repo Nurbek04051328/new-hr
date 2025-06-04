@@ -8,7 +8,7 @@ export const notifStore = defineStore('notifStore', () => {
     type: 'success',
   })
 
-  const setNotif = (show, msg, type, time = 1800) => {
+  const setNotif = (show, msg, type, time) => {
     notif.value = {
       show,
       msg,
@@ -20,7 +20,7 @@ export const notifStore = defineStore('notifStore', () => {
         show: false,
         msg: {},
       }
-    }, time)
+    }, time || 2000)
   }
 
   return {

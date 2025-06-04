@@ -63,7 +63,7 @@ export const doorStore = defineStore('doorStore', () => {
   
 
   const allDoor = async (search) => {
-    console.log("searchDoor", search);
+    // console.log("searchDoor", search);
     
     try {
       const { data } = await api.get(url, {
@@ -74,7 +74,7 @@ export const doorStore = defineStore('doorStore', () => {
         },
       })
       door.data = [...data.data]
-      console.log("Door Data", door.data);
+      // console.log("Door Data", door.data);
       
       door.count = data?.count
     } catch (err) {
@@ -140,11 +140,11 @@ export const doorStore = defineStore('doorStore', () => {
 
   const statusDoor = async (id) => {
     try {
-      console.log("Status Door ID", id);
+      // console.log("Status Door ID", id);
       
       if (!id) return false
       const { data } = await api.get(`${url}/status/${id}`)
-      console.log("Status Data", data);
+      // console.log("Status Data", data);
       
       door.data = door.data?.map((item) => {
         if (item?._id == data?._id)
@@ -175,7 +175,7 @@ export const doorStore = defineStore('doorStore', () => {
         ...data.data.map((item) => {
           return {
             ...item,
-            status: item.status == 'active',
+            status: item.status,
           }
         }),
       ]
@@ -190,7 +190,6 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post('user-synced-door', payload)
-      syncedDoorWorker.status = syncedDoorWorker.status == 'active'
       syncedDoorWorker.data = [data, ...syncedDoorWorker.data.slice(0, door.limit - 1)]
       syncedDoorWorker.count += 1
       loading.setLoading(false)
@@ -200,6 +199,25 @@ export const doorStore = defineStore('doorStore', () => {
     }
   }
 
+  const returnSyncedWorkerDoor = async (id) => {
+    try {
+      if (!id) return false
+      const { data } = await api.get(`user-synced-door/${id}`)
+      console.log("Status Data", data);
+      
+      syncedDoorWorker.data = syncedDoorWorker.data?.map((item) => {
+        if (item?._id == data?._id)
+          return {
+            ...data,
+            status: data.status
+          }
+        return item
+      })
+      notif.setNotif(true, statusUpdatedMessage, 'success')
+    } catch (err) {
+      console.warn('Error Status', err)
+    }
+  }
   const removeSyncedWorkerDoor = async (id) => {
     try {
       if (!id) return false
@@ -208,7 +226,7 @@ export const doorStore = defineStore('doorStore', () => {
       syncedDoorWorker.data = syncedDoorWorker.data?.filter((item) => item?._id !== id)
       syncedDoorWorker.count -= 1
       loading.setLoading(false)
-      notif.setNotif(true, doorDeletedMessage, 'info')
+      notif.setNotif(true, doorUserDeletedMessage, 'info')
     } catch (err) {
       console.warn('Error Remove', err)
     }
@@ -234,7 +252,8 @@ export const doorStore = defineStore('doorStore', () => {
     allSyncedDoorWorker,
     changeSyncedWorkerDoorPage,
     addSyncedWorkerDoor,
-    removeSyncedWorkerDoor
+    removeSyncedWorkerDoor,
+    returnSyncedWorkerDoor
   }
 })
 
@@ -250,6 +269,12 @@ const doorDeletedMessage = {
   ru: 'Дверь удалена',
   uz: 'Eshik o‘chirildi',
   kr: 'Эшик ўчирилди',
+}
+const doorUserDeletedMessage = {
+  en: 'User deleted',
+  ru: 'Ползователь удалена',
+  uz: 'Xodim o‘chirildi',
+  kr: 'Ходим ўчирилди',
 }
 
 const doorUpdatedMessage = {

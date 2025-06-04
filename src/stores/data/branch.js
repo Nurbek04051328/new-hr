@@ -63,7 +63,7 @@ export const branchStore = defineStore('branchStore', () => {
           title: search,
         },
       })
-      console.log('Branch', data)
+      // console.log('Branch', data)
       branch.data = [
         ...data.data.map((item) => {
           return {
@@ -82,7 +82,7 @@ export const branchStore = defineStore('branchStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      console.log('Created branch', data)
+      // console.log('Created branch', data)
       branch.status = data.status == 'active'
       branch.data = [data, ...branch.data.slice(0, branch.limit - 1)]
       branch.count += 1
@@ -96,10 +96,10 @@ export const branchStore = defineStore('branchStore', () => {
   const saveBranch = async (payload) => {
     try {
       loading.setLoading(true)
-      console.log("ketdi payload", payload);
+      // console.log("ketdi payload", payload);
       
       const { data } = await api.put(`${url}`, payload)
-      console.log('Keldi payload', data)
+      // console.log('Keldi payload', data)
 
       branch.data = branch.data?.map((item) => {
         if (item?._id == data?._id)
@@ -143,7 +143,7 @@ export const branchStore = defineStore('branchStore', () => {
     try {
       if (!id) return false
       const { data } = await api.get(`${url}/status/${id}`)
-      console.log("branchdata", data);
+      // console.log("branchdata", data);
 
       branch.data = branch.data?.map((item) => {
         if (item?._id == data?._id)

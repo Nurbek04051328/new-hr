@@ -24,10 +24,10 @@ export const uploadStore = defineStore('uploadStore', () => {
           'Content-Type': 'multipart/form-data',
         },
       })
-      console.log('Upload Res', data)
+      // console.log('Upload Res', data)
       image.value.path = data
 
-      console.log('Image', image.value)
+      // console.log('Image', image.value)
     } catch (err) {
       console.warn('Upload', err)
     }

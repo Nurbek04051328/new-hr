@@ -178,7 +178,7 @@ const searchEventData = ref({
 const updateType = async () => {
   if (searchEventData.value) {
     loading.setLoading(true);
-    console.log('searchEventData:', searchEventData.value);
+    // console.log('searchEventData:', searchEventData.value);
 
     try {
       await store.allEvent(searchEventData.value);

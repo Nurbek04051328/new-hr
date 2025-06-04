@@ -23,7 +23,7 @@ export const workerHistoryStore = defineStore('workerHistoryStore', () => {
   })
 
   const nextWorker = async (limit, id) => {
-    console.log("nextworkerId", id);
+    // console.log("nextworkerId", id);
     
     const { data } = await api.get(url, {
       params: {
@@ -32,7 +32,7 @@ export const workerHistoryStore = defineStore('workerHistoryStore', () => {
         user: id
       },
     })
-    console.log('NEXT', data)
+    // console.log('NEXT', data)
 
     if (workerHistory.count >= route?.query?.limit ? route?.query?.limit : workerHistory.limit) {
       workerHistory.data = [...workerHistory.data, ...data.data.slice(0, limit-1)]
@@ -55,7 +55,7 @@ export const workerHistoryStore = defineStore('workerHistoryStore', () => {
           user: id,
         },
       })
-      console.log('Worker', data)
+      // console.log('Worker', data)
       workerHistory.data = [...data.workerHistory]
       workerHistory.count = data?.count
     } catch (err) {
@@ -64,14 +64,14 @@ export const workerHistoryStore = defineStore('workerHistoryStore', () => {
   }
 
   const addWorker = async (payload) => {
-    console.log('Payload', payload)
+    // console.log('Payload', payload)
 
     try {
       loading.setLoading(true)
-      console.log('PayloadAAdd', payload);
+      // console.log('PayloadAAdd', payload);
       
       const { data } = await api.post(url, payload)
-      console.log('Kelgan', data)
+      // console.log('Kelgan', data)
 
       workerHistory.data = [data, ...workerHistory.data.slice(0, workerHistory.limit - 1)]
       workerHistory.count += 1
@@ -86,7 +86,7 @@ export const workerHistoryStore = defineStore('workerHistoryStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.put(`${url}`, payload)
-      console.log('Save Worker', data)
+      // console.log('Save Worker', data)
 
       workerHistory.data = workerHistory.data?.map((item) => {
         if (item?._id == data?._id) return data

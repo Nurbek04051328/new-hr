@@ -168,10 +168,10 @@ async function openModal(day) {
       date: new Date(day.date).toISOString(),
       shift: "off",
     }
-    console.log("payload", payload);
+    // console.log("payload", payload);
     
     const data = await store.userCreateCalendar(payload)
-    console.log("data", data);
+    // console.log("data", data);
     
     if (data && data._id) {
       calendarID.value = data._id
@@ -193,7 +193,7 @@ async function openModal(day) {
 
 // filterMonth
 function changeMonth() {
-  console.log("tanlangan oy",selectedMonth.value);
+  // console.log("tanlangan oy",selectedMonth.value);
   
   getData()
 }
@@ -256,7 +256,7 @@ const fillDays = (data, year, month) => {
     const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
     const dd = String(dateObj.getDate()).padStart(2, '0')
     const dateStr = `${yyyy}-${mm}-${dd}`
-    console.log("CHECK DATE:", item.day, new Date(year, Number(month), item.day).toDateString())
+    // console.log("CHECK DATE:", item.day, new Date(year, Number(month), item.day).toDateString())
 
     daysArr.push({
       date: dateStr,
@@ -283,7 +283,7 @@ const fillDays = (data, year, month) => {
       reason:''
     })
   }
-  console.log("daysArr", daysArr);
+  // console.log("daysArr", daysArr);
   
   days.value = daysArr
 }

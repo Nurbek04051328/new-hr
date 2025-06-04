@@ -97,7 +97,7 @@ const initFlatpickr = () => {
     allowInput: true,
     locale: locales[i18n.global.locale] || locales['uz'],
     onChange: (selectedDates) => {
-      console.log('FlatPickr', selectedDates)
+      // console.log('FlatPickr', selectedDates)
       model.value = selectedDates
     },
   })

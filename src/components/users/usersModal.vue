@@ -58,7 +58,6 @@
               :label="$t('phoneNumber')"
               v-model="data.phone"
               :required="true"
-              :maska="true"
               name="phone"
             />
           </div>
@@ -312,7 +311,7 @@ watch(modal, (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getUser(newVal?.id)
-    console.log('Put', res.data)
+    // console.log('Put', res.data)
     if (!res?.data) throw new Error('No data received')
     // const formattedTime = res.data.workTime.map((item) => ({
     //   ...item,

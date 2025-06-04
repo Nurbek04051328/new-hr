@@ -40,7 +40,7 @@ export const loggerStore = defineStore('loggerStore', () => {
           ...search
         },
       })
-      console.log('logger', data)
+      // console.log('logger', data)
       loggerRouter.data = [...data.data]
       loggerRouter.count = data?.count
     } catch (err) {
@@ -57,7 +57,7 @@ export const loggerStore = defineStore('loggerStore', () => {
           ...search
         },
       })
-      console.log('logger', data)
+      // console.log('logger', data)
       loggerDoor.data = [...data.data]
       loggerDoor.count = data?.count
     } catch (err) {
