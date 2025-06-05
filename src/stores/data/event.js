@@ -49,9 +49,13 @@ export const eventStore = defineStore('eventStore', () => {
           page: 1,
         },
       })
+      const newEvents = data.data || []
+      const merged = [...newEvents, ...event.data]
+      event.data = merged.slice(0, event.limit)
+      event.count += newEvents.length
       // console.log('socketEvent', data)
-      event.data = [...data.data, ...event.data]
-      event.count += data.data.length
+      // event.data = [...data.data, ...event.data]
+      // event.count += data.data.length
     } catch (err) {
       console.warn('Error', err)
     }

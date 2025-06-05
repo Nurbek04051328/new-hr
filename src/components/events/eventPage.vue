@@ -109,6 +109,9 @@ const department = departmentStore()
 import { branchStore } from '@/stores/data/branch'
 const branch = branchStore()
 
+import { doorStore } from '@/stores/data/door'
+const door_store = doorStore()
+
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()
 
@@ -201,7 +204,13 @@ const clearSearch = async () => {
 const getData = async () => {
   try {
     loading.setLoading(true)
-    await Promise.all([store.allEvent(searchEventData.value), department.allDepartment(), branch.allBranch(), user_store.allUsers()])
+    await Promise.all([
+      store.allEvent(searchEventData.value), 
+      department.allDepartment(), 
+      branch.allBranch(), 
+      user_store.allUsers(),
+      door_store.allDoor({status: 'active', doorStatus:'online'})
+    ])
     loading.setLoading(false)
   } catch (err) {
     console.warn('Error', err)

@@ -34,7 +34,7 @@
         door__store.statusDoors = [...status];
       });
       socket.on("new-events", async(count) => {
-        // console.log('new-events', count.count);
+        console.log('new-events', count.count);
         if(count.count > 0) {
           await event__store.newEventForSocket(count.count)
           await statistic__store.getHomeLastEventsInfo()
