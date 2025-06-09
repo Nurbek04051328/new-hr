@@ -28,7 +28,7 @@
             />
           </div>
 
-          <severalArray
+          <!-- <severalArray
             v-if="data.role == 'security'"
             :required="true"
             label="Doors"
@@ -38,7 +38,7 @@
             v-model="data.doors"
             :error="v$.doors.$invalid && v$.doors.$dirty"
             :guide="`Doors ${$t('empty')}`"
-          />
+          /> -->
 
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-1">
             <defaultInput
@@ -226,6 +226,7 @@ const rules = computed(() => ({
   gender: { required },
   birthDay: { required },
   address: { required },
+  gender: { required },
 }))
 const v$ = useVuelidate(rules, data)
 
@@ -311,7 +312,7 @@ watch(modal, (newVal) => {
 watch(modal, async (newVal) => {
   if (newVal?.id?.length > 0) {
     const res = await store.getUser(newVal?.id)
-    // console.log('Put', res.data)
+    console.log('Put', res.data)
     if (!res?.data) throw new Error('No data received')
     // const formattedTime = res.data.workTime.map((item) => ({
     //   ...item,

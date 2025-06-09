@@ -22,14 +22,14 @@
             <div>
               <!-- {{ lastEvent }} -->
               <div 
-                class="text-[19px]"
+                class="text-[16px]"
                 :class="lastEvent?.action === 'exit' ? 'text-redColor' : lastEvent?.action === 'enter' ? 'text-greenColor' : ''" 
                 >{{ getDoorTypeName(lastEvent?.action, $i18n.locale) || '' }}
               </div>
               <div class="text-sm">{{ lastEvent?.door?.title }}</div>
             </div>
           </div>
-          <div class="text-lg">
+          <div class="text-[16px]">
             <div>{{ convertDateShort(lastEvent?.time,)}}</div>
             <div>{{ convertDateShort(lastEvent?.time, 'hour-second')}}</div>
           </div>

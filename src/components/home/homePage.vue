@@ -6,13 +6,13 @@
       <div class="overflow-hidden col-span-4 md-max:col-span-12 flex flex-col gap-3">
         <!-- <homeAllCount :count="countAllEvent" /> -->
         <homeDoorstatus  />
-        <homeEventStatistic :count="lastStatistic?.count" :came="lastStatistic?.came" :notCame="lastStatistic?.notCame" />
-        <lastEvent v-if="lastStatistic?.lastEnter" :lastEvent="lastStatistic?.lastEnter"  />
-        <lastEvent v-if="lastStatistic?.lastExit" :lastEvent="lastStatistic?.lastExit" />
+        <homeEventStatistic :count="store.countAllEvent.value?.count" :came="store.countAllEvent.value?.came" :notCame="store.countAllEvent.value?.notCame" />
+        <lastEvent v-if="store.countAllEvent.value?.lastEnter" :lastEvent="store.countAllEvent.value?.lastEnter"  />
+        <lastEvent v-if="store.countAllEvent.value?.lastExit" :lastEvent="store.countAllEvent.value?.lastExit" />
         <!-- <pre>{{ lastStatistic }}</pre> -->
       </div>
       <div class="overflow-hidden col-span-8 md-max:col-span-12 gap-4 flex flex-col">
-        <lastEventTable :lastEvents="lastStatistic?.lastEvents" />
+        <lastEventTable :lastEvents="store.countAllEvent.value?.lastEvents" />
       </div>
     </div>
     <!-- <lineChart />
@@ -36,8 +36,6 @@ import homeDoorstatus from './homeDoorStatus.vue'
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()
 
-const lastStatistic = ref({})
-const countAllEvent = ref({})
 
 import { statisticStore } from '@/stores/data/statistic'
 const store = statisticStore()
@@ -45,9 +43,8 @@ const store = statisticStore()
 const getData = async () => {
   try {
     loading.setLoading(true)
-    lastStatistic.value = await store.getHomeLastEventsInfo()
-    countAllEvent.value = await store.getHomeLastInfo()
-    // console.log("lastStatistic", lastStatistic.value);
+    await store.getHomeLastEventsInfo()
+    // await store.getHomeLastInfo()
     
     loading.setLoading(false)
   } catch (err) {

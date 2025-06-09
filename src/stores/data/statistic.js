@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from '@/helpers/api'
-import { reactive, computed } from 'vue'
+import { reactive, ref, computed } from 'vue'
 
 const url = '/statistic'
 import { notifStore } from '../helpers/notification'
@@ -21,7 +21,8 @@ export const statisticStore = defineStore('statisticStore', () => {
     limit: 30,
     page: 1,
   })
-
+  // const lastStatistic = reactive({})
+  const countAllEvent = reactive({})
   // const allDoor = async (search) => {
   //   try {
   //     const { data } = await api.get(url, {
@@ -49,9 +50,7 @@ export const statisticStore = defineStore('statisticStore', () => {
   const getHomeLastInfo = async () => {
     try {
       const {data} = await api.get(`${url}/home/events-count`)
-      // console.log("data", data);
-      
-      return data
+      if(data) lastStatistic.value = {...data}
     } catch (err) {
       console.warn('Error', err)
     }
@@ -59,8 +58,8 @@ export const statisticStore = defineStore('statisticStore', () => {
   const getHomeLastEventsInfo = async () => {
     try {
       const {data} = await api.get(`${url}/home/last-events`)
-      // console.log("data", data);
-      
+      console.log("getHomeLastEventsInfo", data);
+      if (data) countAllEvent.value = {...data}
       return data
     } catch (err) {
       console.warn('Error', err)
@@ -69,7 +68,8 @@ export const statisticStore = defineStore('statisticStore', () => {
 
   return {
     getHomeLastInfo,
-    getHomeLastEventsInfo
+    getHomeLastEventsInfo,
+    countAllEvent
   }
 })
 

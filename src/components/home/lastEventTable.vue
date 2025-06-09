@@ -25,12 +25,11 @@
           <td class="td-first">{{ index + 1 }}</td>
           <td class="td-img">
             <div class="size-14 overflow-hidden">
-
                 <img
                   v-if="item?.user?.faceUrl?.length > 0"
                   :src="`${url}/${item?.user?.faceUrl}`"
                   alt=""
-                  class="object-contain size-full cursor-pointer rounded-[13px]"
+                  class="object-contain size-full cursor-pointer rounded-[13px] w-[40px]"
                   @click="openFaceBox(item?.user?.faceUrl)"
                 />
                 <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
@@ -59,13 +58,13 @@
               {{ convertDateShort(item?.time, 'hour-second')}}
             </div>
           </td>
-          <td class="td-img">
+          <td class="td-last">
             <div class="size-14 overflow-hidden">
                 <img
                   v-if="item?.pictureURL"
                   :src="`${url}/${item?.pictureURL}`"
                   alt=""
-                  class="object-contain size-full cursor-pointer rounded-[13px]"
+                  class="object-contain size-full cursor-pointer rounded-[13px] w-[40px]"
                   @click="openLightbox(item?.pictureURL)"
                 />
                 <img

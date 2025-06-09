@@ -230,14 +230,7 @@ const send = async () => {
         return
       }
 
-      const hasInvalidTime = workTime.some(
-        (item) => formatToISO(item.startTime) >= formatToISO(item.endTime),
-      )
-
-      if (hasInvalidTime) {
-        notif.setNotif(true, errorTime, 'warning')
-        return
-      }
+      
 
       const formattedWorkTime = workTime.map((item) => ({
         ...item,

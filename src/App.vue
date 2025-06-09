@@ -38,7 +38,6 @@
         if(count.count > 0) {
           await event__store.newEventForSocket(count.count)
           await statistic__store.getHomeLastEventsInfo()
-          await statistic__store.getHomeLastInfo()
         }
       });
       socket.on("sync-status", async(obj) => {
