@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[25px] pt-[18px] pb-[38px] rounded-[13px] shadow-sm bg-hover space-y-4">
+  <div class="px-[25px] pt-[18px] pb-[10px] rounded-[13px] shadow-sm bg-hover space-y-4">
     <table class="table">
       <thead class="">
         <tr>
@@ -7,15 +7,15 @@
           <th class="th">{{ $t('photo') }}</th>
           <th class="th">{{ $t('fullName') }}</th>
           <th class="th">{{ $t('department') }}</th>
-          <th class="th">{{ $t('role') }}</th>
+          <!-- <th class="th">{{ $t('role') }}</th> -->
           <th class="th text-center">Филиал</th>
           <th class="th text-center">{{ $t('door') }}</th>
           <th class="th">{{ $t('date') }}</th>
-          <th class="th"></th>
+          <th class="th-last"></th>
           <!-- <th class="th-last"></th> -->
         </tr>
       </thead>
-
+      <!-- <pre>{{ lastEvents }}</pre> -->
       <tbody v-if="lastEvents?.length > 0">
         <tr
           v-for="(item, index) of lastEvents"
@@ -37,7 +37,7 @@
           </td>
           <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-absence', params: { id: item?.user?._id } })">{{ item?.user?.fullName || '' }}</td>
           <td class="td">{{ item?.user?.department?.name || '' }}</td>
-          <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
+          <!-- <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td> -->
           <td class="td text-center">
             {{ item?.door?.branch?.title || '' }}
           </td>
@@ -59,12 +59,12 @@
             </div>
           </td>
           <td class="td-last">
-            <div class="size-14 overflow-hidden">
+            <div class="w-9">
                 <img
                   v-if="item?.pictureURL"
                   :src="`${url}/${item?.pictureURL}`"
                   alt=""
-                  class="object-contain size-full cursor-pointer rounded-[13px] w-[40px]"
+                  class="object-contain size-full cursor-pointer  w-24"
                   @click="openLightbox(item?.pictureURL)"
                 />
                 <img

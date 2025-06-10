@@ -39,7 +39,7 @@
         <img 
           v-if="lastEvent?.pictureURL"
           :src="`${url}/${lastEvent?.user?.faceUrl}`" 
-          class="object-contain w-24  size-full cursor-pointer rounded-[13px]"
+          class="object-contain w-24  size-full cursor-pointer rounded-[13px] h-28"
           @click="openFaceBox(lastEvent?.user?.faceUrl)" 
           alt=""
         >
