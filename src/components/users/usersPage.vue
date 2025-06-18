@@ -83,16 +83,16 @@ const searchEvent = async () => {
   if (search.value?.length >= 2) {
     await store.allUsers(null, search.value)
   } else {
-    if (search.value) {
-      await store.allUsers()
-    }
+    // if (search.value) {
+    //   await store.allUsers()
+    // }
   }
 }
-watch(search, async (newVal) => {
-  if (!newVal) {
-    await store.allUsers()
-  }
-})
+// watch(search, async (newVal) => {
+//   if (!newVal) {
+//     await store.allUsers()
+//   }
+// })
 
 const changePage = (value) => {
   store.changePage(value)
