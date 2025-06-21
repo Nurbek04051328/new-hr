@@ -127,6 +127,7 @@ const route = useRoute()
 
 
 const search = ref('')
+
 const searchEvent = async () => {
   if (search.value?.length >= 3) {
     await store.allEvent(search.value, null)
@@ -204,6 +205,7 @@ const clearSearch = async () => {
 const getData = async () => {
   try {
     loading.setLoading(true)
+    console.log("limited", searchEventData.value)
     await Promise.all([
       store.allEvent(searchEventData.value), 
       department.allDepartment(), 

@@ -143,8 +143,11 @@ const clearSearch = async () => {
 
 const getData = async () => {
   try {
+    const filtered = Object.fromEntries(
+      Object.entries(searchUserData.value).filter(([_, v]) => v !== '')
+    )
     loading.setLoading(true)
-    await Promise.all([store.allUsers(), d_store.allDepartment(), door_store.allDoor({status: 'active', doorStatus:'online'})])
+    await Promise.all([store.allUsers(filtered), d_store.allDepartment(), door_store.allDoor({status: 'active', doorStatus:'online'})])
     loading.setLoading(false)
   } catch (err) {
     console.warn('Error', err)
