@@ -38,15 +38,15 @@
         />
       </div> -->
 
-      <defaultSelect
+      <filterSelect
         :placeholder="$t('departmentText')"
         :translates="true"
         :disabled="data.type == 0"
         :label="$t('chief')"
         v-model="data.chief"
         :required="true"
-        :option="users"
-        title="fullName"
+        :options="users"
+        option_title="fullName"
         name="chief"
       />
 
@@ -129,6 +129,7 @@ defineProps({
 import middleModal from '@/assets/helpers/overlays/middleModal.vue'
 import defaultInput from '@/assets/helpers/others/defaultInput.vue'
 import defaultSelect from '@/assets/helpers/others/defaultSelect.vue'
+import filterSelect from '@/assets/helpers/others/filterSelect.vue'
 import timePicker from '@/assets/helpers/others/timePicker.vue'
 import { type, weeks } from '@/helpers/object'
 
@@ -274,11 +275,13 @@ watch(modal, async (newVal) => {
     const res = await department.getDepartment(newVal?.id)
     // console.log(res.data)
 
-    const formattedTime = res.data.workTime.map((item) => ({
-      ...item,
-      startTime: formatToTime(item.startTime),
-      endTime: formatToTime(item.endTime),
-    }))
+    const formattedTime = Array.isArray(res.data?.workTime)
+    ? res.data.workTime.map((item) => ({
+        ...item,
+        startTime: formatToTime(item.startTime),
+        endTime: formatToTime(item.endTime),
+      }))
+    : []
 
     data.value = {
       ...res.data,

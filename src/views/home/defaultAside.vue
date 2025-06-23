@@ -39,7 +39,7 @@
         ]"
       >
         <router-link
-          v-for="item of menu?.filter((item) => item?.meta?.group == 'main')"
+          v-for="item of filteredMenu?.filter((item) => item?.meta?.group == 'main')"
           :key="item.name"
           :to="{ name: item.name }"
           :class="[
@@ -58,7 +58,7 @@
 
       <nav class="mt-auto flex flex-col">
         <router-link
-          v-for="item of menu?.filter((item) => item?.meta?.group == 'setting')"
+          v-for="item of filteredMenu?.filter((item) => item?.meta?.group == 'setting')"
           :key="item?.name"
           :to="{ name: 'branch' }"
           :class="[
@@ -84,6 +84,11 @@ import { storeToRefs } from 'pinia'
 import { asideStore } from '@/stores/other/aside'
 const aside_store = asideStore()
 const { grow } = storeToRefs(aside_store)
+import { authStore } from '@/stores/admin/auth'
+const store = authStore()
+const { user } = storeToRefs(store)
+
+
 
 import { menu } from '@/router/nav/menu'
 import { useRoute } from 'vue-router'
@@ -98,4 +103,16 @@ const { locale } = useI18n()
 const settingMenu = computed(() => {
   return setting?.map((item) => item?.name)
 })
+
+const filteredMenu = computed(() => {
+  return menu.filter((item) => {
+    // agar access yo‘q bo‘lsa — barchaga ochiq
+    if (!item.access && !item.meta?.access) return true
+
+    const accessRoles = item.access || item.meta?.access
+    return accessRoles.includes(user.value?.role)
+  })
+})
+
+
 </script>

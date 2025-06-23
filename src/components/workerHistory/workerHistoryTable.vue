@@ -10,7 +10,7 @@
               <th class="th">Должность</th>
               <th class="th">Дата входа</th>
               <th class="th">Дата выхода</th>
-              <th class="th-last"></th>
+              <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
           </thead>
 
@@ -25,7 +25,7 @@
               <td class="td">{{ item?.staffPosition || '' }}</td>
               <td class="td">{{ convertDateShort(item?.enterDate) }}</td>
               <td class="td">{{ item?.leaveDate ? convertDateShort(item?.leaveDate) : '-'}}</td>
-              <td class="td-last">
+              <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                 <dropdownPage
                   name="worker-history"
                   :id="item._id"
@@ -54,6 +54,7 @@ import tableButton from '@/assets/table/tableButton.vue'
 import { convertDateShort } from '@/helpers/func';
 import { useRoute } from 'vue-router'
 const route = useRoute()
+import { storeToRefs } from 'pinia'
 
 defineProps({
   workerHistories: {
@@ -82,6 +83,10 @@ const remove = removeStore()
 
 import { workerHistoryStore } from '@/stores/data/workerHistory'
 const store = workerHistoryStore()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 const removeItem = async () => {
   try {

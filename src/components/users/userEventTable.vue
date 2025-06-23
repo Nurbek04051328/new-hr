@@ -48,12 +48,12 @@
                   </div>
                 </td>
                 <td class="td-img">
-                  <div class="size-14 overflow-hidden">
+                  <div class="overflow-hidden">
                     <img
                       v-if="item.pictureURL"
                       :src="`${url}/${item?.pictureURL}`"
                       alt=""
-                      class="object-contain size-full cursor-pointer"
+                      class="bject-cover aspect-[3/2] w-16 h-12 cursor-pointer"
                       @click="openLightbox(item?.pictureURL)"
                     />
                     <img

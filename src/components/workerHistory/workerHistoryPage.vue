@@ -2,7 +2,7 @@
   <workerHistoryModal />
 
   <defaultMain>
-    <headPart title=" " name="worker-history" :newToggleBtn="true" />
+    <headPart title=" " name="worker-history" :newToggleBtn="['admin', 'boss'].includes(user?.role)" />
 
     <workerHistoryTable
       :workerHistories="workerHistory.data"
@@ -48,6 +48,10 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 
 const changePage = (value) => {

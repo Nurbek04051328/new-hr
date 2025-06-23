@@ -43,7 +43,7 @@
             v-for="(day, idx) in days" 
             :key="day.date ? day.date + day.day : 'empty-' + idx"
             type="button"
-            @click="openModal(day)"
+            @click="['admin', 'boss'].includes(user?.role) && openModal(day)"
             :class="[
               day.isCurrentMonth ? getStatusClass(day.dayStatus) : 'bg-gray-50',
               (day.isToday) && 'font-semibold',
@@ -132,6 +132,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/data/users'
 import { doorStore } from '@/stores/data/door'
 import { url } from '@/helpers/api'
@@ -141,6 +142,9 @@ import VueEasyLightbox from 'vue-easy-lightbox';
 import userEventCalendarModal from '@/components/users/userEventCalendarModal.vue'
 import { nextTick } from 'vue'
 
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 
 const route = useRoute()

@@ -110,13 +110,13 @@ export const departmentStore = defineStore('departmentStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.put(`${url}`, payload)
-      // console.log('Save Department', data)
+      console.log('Save Department', data)
 
       department.data = department.data?.map((item) => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data?.status
           }
         return item
       })

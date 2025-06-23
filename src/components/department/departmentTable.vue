@@ -10,7 +10,7 @@
               <!-- <th class="th">{{ $t('parent') }}</th> -->
               <th class="th">{{ $t('chief') }}</th>
               <th class="th">{{ $t('status') }}</th>
-              <th class="th-last"></th>
+              <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
           </thead>
 
@@ -26,14 +26,14 @@
               <td class="td">{{ item.chief?.fullName || '' }}</td>
               <td class="td">
                 <checkboxPage 
-                  :modelValue="item.status === 'active'"
+                  :modelValue="item?.status == 'active'? true : false"
                   @update:modelValue="val => {
                     item.status = val ? 'active' : 'inactive'
                     store.statusDepartment(item._id)
                   }" 
                 />
               </td>
-              <td class="td-last">
+              <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                 <dropdownPage
                   name="department"
                   :id="item._id"
@@ -53,6 +53,7 @@
   <nothingPage :visibility="count <= 0 && !loading.loading" />
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import checkboxPage from '@/assets/helpers/others/checkboxPage.vue'
@@ -86,6 +87,11 @@ const store = departmentStore()
 
 import { removeStore } from '@/stores/helpers/remove'
 const remove = removeStore()
+
+
+import { authStore } from '@/stores/admin/auth'
+const user_store = authStore()
+const { user } = storeToRefs(user_store)
 
 const removeItem = async () => {
   try {

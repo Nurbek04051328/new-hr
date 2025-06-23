@@ -51,7 +51,7 @@ export const userStore = defineStore('userStore', () => {
 
   const changePage = async (value) => {
     users.page = value
-    router.push({ name: 'users', query: { page: users.page } })
+    router.push({ name: 'workers', query: { page: users.page } })
   }
 
   const reloadCalendarFunction = async () => {

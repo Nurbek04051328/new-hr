@@ -31,6 +31,7 @@ export const setting = [
       icon: BuildingOffice2Icon,
       group: 'main',
       search: '',
+      access:['admin', 'boss'],
     },
   },
   {
@@ -47,6 +48,7 @@ export const setting = [
       icon: BuildingStorefrontIcon,
       group: 'main',
       search: '',
+      access:['admin', 'boss',],
     },
   },
   {
@@ -63,6 +65,7 @@ export const setting = [
       icon: GiftIcon,
       group: 'main',
       search: '',
+      access:['admin', 'boss',],
     },
   },
   {
@@ -79,6 +82,7 @@ export const setting = [
       icon: DocumentCheckIcon,
       group: 'main',
       search: '',
+      access:['admin', 'boss',],
     },
   },
   

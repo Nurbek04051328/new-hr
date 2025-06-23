@@ -2,7 +2,7 @@
   <absenceModal :reasons="reason_store.activeReasons" />
 
   <defaultMain>
-    <headPart name="worker-absence" :newToggleBtn="true">
+    <headPart name="worker-absence" :newToggleBtn="['admin', 'boss'].includes(user?.role)">
     </headPart>
 
     <absenceTable :absence="absence.data" :count="absence.count" :page="absence.page" :limit="absence.limit" />
@@ -42,6 +42,11 @@ const loading = loadingStore()
 
 import { reasonStore } from '@/stores/data/reason'
 const reason_store = reasonStore()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
+
 
 const changePage = (value) => {
   store.changePage(value)

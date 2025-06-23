@@ -12,13 +12,13 @@
               <!-- <th class="th">Номер</th> -->
               <th class="th">{{ $t('role') }}</th>
               <th class="th">{{ $t('status') }}</th>
-              <th class="th-last"></th>
+              <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
           </thead>
 
           <tbody>
             <tr
-              v-for="(item, index) of user"
+              v-for="(item, index) of workers"
               :key="item._id"
               class='cursor-pointer'
               :class="[index % 2 !== 0 ? 'bg-index2' : '', 'hover:bg-hover']"
@@ -26,45 +26,45 @@
             >
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
               <td class="td-img">
-                <div class="size-14 overflow-hidden">
+                <div class="overflow-hidden">
                   <img
                     v-if="item.faceUrl?.length > 0"
                     :src="`${url}/${item.faceUrl}`"
                     alt=""
-                    class="object-contain size-full cursor-pointer"
+                    class="object-cover aspect-[3/2] w-12 h-16 cursor-pointer"
                     @click="openFaceBox(item?.faceUrl, $event)"
                   />
-                  <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
+                  <UserIcon v-else :class="['w-full h-full object-contain text-placeholder']" />
                 </div>
               </td>
               <td 
                 class="td-second"
-                @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
+                @click="$router.push({ name: 'worker-events', params: { id: item?._id } })"
               >
                 {{ item.fullName || '' }}
               </td>
               <td class="td"
-              @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
-              >{{ item.department?.name || '' }}</td>
+              @click="$router.push({ name: 'worker-events', params: { id: item?._id } })"
+              >{{ item?.department?.name || '' }}</td>
               <td class="td"
-              @click="$router.push({ name: 'worker-absence', params: { id: item?._id } })"
+              @click="$router.push({ name: 'worker-events', params: { id: item?._id } })"
               >{{ getRoleName(item?.role, $i18n.locale) || '' }}</td>
               <td class="td">
                 <checkboxPage 
                   :modelValue="item.status === 'active'"
                   @update:modelValue="val => {
                     item.status = val ? 'active' : 'inactive'
-                    store.statusUser(item._id)
+                    store.statusUser(item?._id)
                   }" 
                 />
               </td>
-              <td class="td-last">
+              <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                 <dropdownPage
                   name="workers"
                   :id="item._id"
                   :boolen="index >= (count > 8 ? count - 3 : count)"
                 />
-                <tableButton name="workers" :id="item._id" />
+                <tableButton name="workers" :id="item?._id" />
               </td>
             </tr>
           </tbody>
@@ -82,6 +82,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import checkboxPage from '@/assets/helpers/others/checkboxPage.vue'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
@@ -93,7 +94,7 @@ import VueEasyLightbox from 'vue-easy-lightbox';
 import { role } from '@/helpers/object';
 
 defineProps({
-  user: {
+  workers: {
     type: Array,
     required: true,
   },
@@ -129,6 +130,10 @@ const removeItem = async () => {
     console.warn('Error Remove User', err)
   }
 }
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 
 // Lightbox holati

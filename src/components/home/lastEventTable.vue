@@ -24,18 +24,18 @@
         >
           <td class="td-first">{{ index + 1 }}</td>
           <td class="td-img">
-            <div class="size-14 overflow-hidden">
+            <div class="overflow-hidden">
                 <img
                   v-if="item?.user?.faceUrl?.length > 0"
                   :src="`${url}/${item?.user?.faceUrl}`"
                   alt=""
-                  class="object-contain size-full cursor-pointer rounded-[13px] w-[40px]"
+                  class="object-cover aspect-[3/2] w-12 h-16 cursor-pointer"
                   @click="openFaceBox(item?.user?.faceUrl)"
                 />
                 <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
             </div>
           </td>
-          <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-absence', params: { id: item?.user?._id } })">{{ item?.user?.fullName || '' }}</td>
+          <td class="td cursor-pointer" @click="$router.push({ name: 'worker-events', params: { id: item?.user?._id } })">{{ item?.user?.fullName || '' }}</td>
           <td class="td">{{ item?.user?.department?.name || '' }}</td>
           <!-- <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td> -->
           <td class="td text-center">
@@ -59,18 +59,18 @@
             </div>
           </td>
           <td class="td-last">
-            <div class="w-9">
+            <div class="overflow-hidden">
                 <img
                   v-if="item?.pictureURL"
                   :src="`${url}/${item?.pictureURL}`"
-                  alt=""
-                  class="object-contain size-full cursor-pointer  w-24"
+                  alt="image pictureurl"
+                  class="object-cover aspect-[3/2] w-16 h-12 cursor-pointer"
                   @click="openLightbox(item?.pictureURL)"
                 />
                 <img
                   v-else
                   src="@/assets/images/image-not-found.png"
-                  alt=""
+                  alt="image pictureurl"
                   class="object-contain size-full cursor-pointer"
                   @click="openLightbox(item?.pictureURL)"
                 />

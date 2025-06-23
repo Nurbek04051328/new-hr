@@ -4,33 +4,40 @@
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
     <headPart name="event" :newToggleBtn="false" :count="event.count">
-      <getSelect
-        @update-type="updateType"
-        v-model="searchEventData.user"
-        :name="userMessage"
-        class="w-full"
-        placeholder="Выберите  сотрудника"
-        :array="user_store.activeUser"
-        option_title="fullName"
-      />
-      <getSelect
-        @update-type="updateType"
-        v-model="searchEventData.branch"
-        :name="filialMessage"
-        class="w-full"
-        placeholder="Выберите филиал"
-        :array="branch.activeBranch"
-        option_title="title"
-      />
-      <getSelect
-        @update-type="updateType"
-        v-model="searchEventData.department"
-        :name="departmentMessage"
-        class="w-full"
-        placeholder="Выберите отдел"
-        :array="department.activeDepartment"
-        option_title="name"
-      />
+      <div class="w-[300px]">
+        <filterSelect
+          @change="updateType"
+          v-model="searchEventData.user"
+          :name="userMessage"
+          class="w-full"
+          placeholder="Выберите  сотрудника"
+          :options="user_store.activeUser"
+          option_title="fullName"
+        />
+      </div>
+      <div class="w-[300px]">
+
+        <getSelect
+          @update-type="updateType"
+          v-model="searchEventData.branch"
+          :name="filialMessage"
+          class="w-full"
+          placeholder="Выберите филиал"
+          :array="branch.activeBranch"
+          option_title="title"
+        />
+      </div>
+      <div>
+        <getSelect
+          @update-type="updateType"
+          v-model="searchEventData.department"
+          :name="departmentMessage"
+          class="w-full"
+          placeholder="Выберите отдел"
+          :array="department.activeDepartment"
+          option_title="name"
+        />
+      </div>
       <!-- <VueDatePicker 
         v-model="date" 
         :placeholder="`Выберите месяц`" 
@@ -58,6 +65,7 @@
         <MagnifyingGlassIcon class="w-5 h-5" />
       </button>
       <button
+        v-if="['admin', 'boss'].includes(user?.role)"
         @click="modal.setModal(true, 'event', 'ru')"
         class="flex items-center gap-2 px-2 py-2 bg-blueColor text-white rounded hover:bg-hoverBlue"
       >
@@ -92,6 +100,7 @@ import eventSinxrModal from './eventSinxrModal.vue'
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 import getSelect from '@/assets/helpers/others/getSelect.vue'
+import filterSelect from '@/assets/helpers/others/filterSelect.vue'
 
 import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -118,6 +127,9 @@ const loading = loadingStore()
 import { modalStore } from '@/stores/helpers/modal'
 const modal = modalStore()
 
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
@@ -210,7 +222,7 @@ const getData = async () => {
       store.allEvent(searchEventData.value), 
       department.allDepartment(), 
       branch.allBranch(), 
-      user_store.allUsers(),
+      user_store.allUsers({limit:0}),
       door_store.allDoor({status: 'active', doorStatus:'online'})
     ])
     loading.setLoading(false)

@@ -3,7 +3,7 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="department" :newToggleBtn="true" :count="department.count"/>
+    <headPart name="department" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :count="department.count"/>
 
     <departmentTable
       :department="department.data"
@@ -44,6 +44,11 @@ const user_store = userStore()
 
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
+
 
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
@@ -101,7 +106,7 @@ const getData = async () => {
     await Promise.all([
       department_store.allDepartment(),
       department_store.getParent(),
-      user_store.allUsers(),
+      user_store.allUsers({limit:0}),
     ])
     loading.setLoading(false)
   } catch (err) {

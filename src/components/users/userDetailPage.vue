@@ -17,7 +17,7 @@
           <div class="col-span-3 bg-hover rounded-[13px] h-full overflow-auto mainScroll">
             <userInfo :worker="worker" />
           </div>
-          <div class="col-span-9 bg-hover rounded-[13px] overflow-auto p-5">
+          <div class="col-span-9 bg-hover rounded-[13px] overflow-auto px-5">
             <userCalendar  />
           </div>
         </div>
@@ -65,12 +65,12 @@ const links = [
   //   title: 'Статистика'
   // },
   {
-    name: 'worker-absence',
-    title: 'Отсутствие'
-  },
-  {
     name: 'worker-events',
     title: 'События'
+  },
+  {
+    name: 'worker-absence',
+    title: 'Отсутствие'
   },
   {
     name: 'worker-doors',

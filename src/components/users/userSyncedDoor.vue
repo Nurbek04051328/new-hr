@@ -10,7 +10,7 @@
                 <th class="th-first">№</th>
                 <th class="th">Название</th>
                 <th class="th">{{ $t('date') }}</th>
-                <th class="th"></th>
+                <th class="th" v-if="['admin', 'boss'].includes(user?.role)"></th>
               </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                     {{ convertDateShort(item?.time, 'hour-second')}}
                   </span>
                 </td>
-                <td class="td-last">
+                <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                   <dropdownPage
                     name="worker-doors"
                     edit = 'noEdit'
@@ -98,6 +98,12 @@ const route = useRoute()
 
 import { removeStore } from '@/stores/helpers/remove'
 const remove = removeStore()
+
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
+
 
 const changePage = (value) => {
   store.changeSyncedWorkerDoorPage(value, route.params.id)

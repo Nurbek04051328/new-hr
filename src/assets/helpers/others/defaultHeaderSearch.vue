@@ -4,7 +4,7 @@
       <MagnifyingGlassIcon class="w-6 h-6 text-placeholder sm:w-5 sm:h-5" />
     </label>
     <input
-      type="search"
+      type="text"
       id="search"
       class="flex-1 h-full px-2 pr-14 outline-none text-lg bg-transparent text-mainText placeholder:text-placeholder font-medium placeholder:text-base"
       :placeholder="`${$t('search')}...`"

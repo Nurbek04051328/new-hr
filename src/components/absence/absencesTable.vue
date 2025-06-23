@@ -10,7 +10,7 @@
               <th class="th">Причина</th>
               <th class="th">Описание</th>
               <th class="th">Дата</th>
-              <th class="th-last"></th>
+              <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
           </thead>
 
@@ -37,7 +37,7 @@
               <td class="td">
                 {{ convertDateShort(item?.start) }} - {{ convertDateShort(item?.end) }}
               </td>
-              <td class="td-last">
+              <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                 <dropdownPage
                   name="worker-absence"
                   :id="item._id"
@@ -56,6 +56,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
 import dropdownPage from '@/assets/table/dropdownPage.vue'
@@ -90,6 +91,10 @@ const loading = loadingStore()
 
 import { removeStore } from '@/stores/helpers/remove'
 const remove = removeStore()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 const removeItem = async () => {
   try {

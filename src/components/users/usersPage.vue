@@ -3,7 +3,7 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="workers" :newToggleBtn="true" :count="users.count">
+    <headPart name="workers" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :count="users.count">
       <getSelect
         @update-type="updateType"
         v-model="searchUserData.department"
@@ -35,7 +35,7 @@
       </button>
     </headPart>
 
-    <usersTable :user="users.data" :count="users.count" :page="users.page" :limit="users.limit" />
+    <usersTable :workers="users.data" :count="users.count" :page="users.page" :limit="users.limit" />
 
     <paginationPage
       v-model="store.users.page"
@@ -74,6 +74,10 @@ const d_store = departmentStore()
 
 import { doorStore } from '@/stores/data/door'
 const door_store = doorStore()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()

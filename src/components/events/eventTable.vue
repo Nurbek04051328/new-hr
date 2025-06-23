@@ -26,19 +26,18 @@
             >
               <td class="td-first">{{ (page - 1) * limit + index + 1 }}</td>
               <td class="td-img">
-                <div class="size-14 overflow-hidden">
-
+                <div class="overflow-hidden">
                     <img
                       v-if="item.user?.faceUrl?.length > 0"
                       :src="`${url}/${item.user?.faceUrl}`"
                       alt=""
-                      class="object-contain size-full cursor-pointer"
+                      class="object-cover aspect-[3/2] w-12 h-16 cursor-pointer"
                       @click="openFaceBox(item.user?.faceUrl)"
                     />
                     <UserIcon v-else :class="['object-contain size-full text-placeholder']" />
                 </div>
               </td>
-              <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-absence', params: { id: item?.user?._id } })">{{ item.user?.fullName || '' }}</td>
+              <td class="td-second cursor-pointer" @click="$router.push({ name: 'worker-events', params: { id: item?.user?._id } })">{{ item.user?.fullName || '' }}</td>
               <td class="td">{{ item?.user?.department?.name || '' }}</td>
               <td class="td">{{ getRoleName(item.user?.role, $i18n.locale) || '' }}</td>
               <td class="td text-center">
@@ -64,13 +63,12 @@
                 </div>
               </td>
               <td class="td-img">
-                <div class="size-14 overflow-hidden">
-                  <!-- <a v-if="item.pictureURL" :href="`${url}/${item.pictureURL}`" target="_blank"> -->
+                <div class="overflow-hidden">
                     <img
                       v-if="item.pictureURL"
                       :src="`${url}/${item?.pictureURL}`"
                       alt="image pictureurl"
-                      class="object-contain size-full cursor-pointer"
+                      class="object-cover aspect-[3/2] w-16 h-12 cursor-pointer"
                       @click="openLightbox(item?.pictureURL)"
                     />
                     <img
@@ -80,9 +78,6 @@
                       class="object-contain size-full cursor-pointer"
                       @click="openLightbox(item?.pictureURL)"
                     />
-                    
-                  <!-- </a> -->
-                  <!-- <UserIcon v-else :class="['object-contain size-full text-placeholder']" /> -->
                 </div>
               </td>
               <!-- <td class="td-last">
