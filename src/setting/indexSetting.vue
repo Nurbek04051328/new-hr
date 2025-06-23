@@ -7,10 +7,8 @@
           :key="item?.name"
           :to="{ name: item?.name || '' }"
           :class="[
-            'flex items-center gap-1',
-            'text-blueText',
-            'py-1.5 px-2 rounded-md hover:bg-aside hover:text-whiteText',
-            item?.name == route?.name ? 'bg-aside !text-whiteText' : 'bg-transparent text-whiteText',
+            'flex items-center gap-1 text-blueText py-1.5 px-2 rounded-md hover:bg-aside hover:text-whiteText',
+            item?.name == route?.name ? 'bg-aside !text-whiteText' : 'bg-transparent text-blueText',
           ]"
         >
           <component :is="item?.meta?.icon" class="w-6 h-6" />
