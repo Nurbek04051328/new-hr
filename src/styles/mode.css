@@ -144,6 +144,7 @@
   --defaultColor: 220, 220, 220;
 /* COLOR */
 
+
   background: rgba(var(--main));
 }
 
@@ -199,6 +200,9 @@
   --scrollThumb: 40, 80, 180;
   --scrollHover: 30, 60, 150;
   /* SCROLL */
+
+
+
 
   background: rgba(var(--main));
 }

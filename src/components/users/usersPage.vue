@@ -4,23 +4,50 @@
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
     <headPart name="workers" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :count="users.count">
-      <getSelect
-        @update-type="updateType"
-        v-model="searchUserData.department"
-        :name="departmentMessage"
-        class="w-full"
-        placeholder="Выберите отдел"
-        :array="d_store.activeDepartment"
-        option_title="name"
-      />
-      <typeSelect
-        @update-type="updateType"
-        v-model="searchUserData.role"
-        class="w-full"
-        placeholder="Выберите роль"
-        :name="roleMessage"
-        :array="role"
-      />
+      <div class="w-[250px]">
+
+        <getSelect
+          @update-type="updateType"
+          v-model="searchUserData.department"
+          :name="departmentMessage"
+          class="w-full"
+          placeholder="Выберите отдел"
+          :array="d_store.activeDepartment"
+          option_title="name"
+        />
+      </div>
+      <div class="w-[220px]">
+        <typeSelect
+          @update-type="updateType"
+          v-model="searchUserData.role"
+          class="w-full"
+          placeholder="Выберите роль"
+          :name="roleMessage"
+          :array="role"
+        />
+      </div>
+      <div class="w-[220px]">
+        <getSelect
+          @update-type="updateType"
+          v-model="searchUserData.gender"
+          :name="genderMessage"
+          class="w-full"
+          placeholder="Выберите пол"
+          :array="genders"
+          option_title="name"
+        />
+      </div>
+      <div class="w-[220px]">
+        <getSelect
+          @update-type="updateType"
+          v-model="searchUserData.presence"
+          :name="presencesMessage"
+          class="w-full"
+          placeholder="Выберите присутствие"
+          :array="presences"
+          option_title="name"
+        />
+      </div>
       <button
         @click="clearSearch"
         class="flex items-center gap-2 px-2 py-2 bg-redColor text-white rounded hover:bg-hoverRed"
@@ -56,7 +83,7 @@ import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 import typeSelect from '@/assets/helpers/others/typeSelect.vue'
-import { role } from '@/helpers/object'
+import { gender, role } from '@/helpers/object'
 import getSelect from '@/assets/helpers/others/getSelect.vue'
 import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -98,6 +125,19 @@ const searchEvent = async () => {
 //   }
 // })
 
+
+
+const presences = ref([
+  { _id: 'came', name: 'Пришедшие' },
+  { _id: 'not came', name: 'Не пришедшие' },
+])
+const genders = ref([
+  { _id: 'male', name: 'Мужской' },
+  { _id: 'female', name: 'Женский' },
+])
+
+
+
 const changePage = (value) => {
   store.changePage(value)
   getData()
@@ -124,6 +164,8 @@ const updateLimit = (value) => {
 const searchUserData = ref({
   department: '',
   role: '',
+  presence: '',
+  gender: '',
 })
 const updateType = async () => {
   if (searchUserData.value) {
@@ -141,6 +183,8 @@ const clearSearch = async () => {
   searchUserData.value = {
     department: '',
     role: '',
+    presence: '',
+    gender: '',
   }
   getData()
 };
@@ -180,5 +224,17 @@ const departmentMessage = {
   ru: 'Отдел',
   uz: 'Bo‘lim',
   kr: 'Бўлим',
+}
+const presencesMessage = {
+  en: 'Presence',
+  ru: 'Присутствие',
+  uz: 'Присутство',
+  kr: 'Присутствие',
+}
+const genderMessage = {
+  en: 'Gender',
+  ru: 'Пол',
+  uz: 'Jins',
+  kr: 'Жинс',
 }
 </script>

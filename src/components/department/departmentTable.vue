@@ -9,6 +9,7 @@
               <th class="th">{{ $t('name') }}</th>
               <!-- <th class="th">{{ $t('parent') }}</th> -->
               <th class="th">{{ $t('chief') }}</th>
+              <th class="th">Количество</th>
               <th class="th">{{ $t('status') }}</th>
               <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
@@ -24,6 +25,11 @@
               <td class="td w-[40%] 2xl:w-fit">{{ item.name }}</td>
               <!-- <td class="td">{{ item.parent?.name || '' }}</td> -->
               <td class="td">{{ item.chief?.fullName || '' }}</td>
+              <td class="td"><div>
+                <button class="danger-tag mr-1">{{ item?.notCamed }}</button>  
+                <span class="success-tag mr-1">{{ item?.camed }}</span>
+                <span class="default-tag">{{ item?.users }}</span>
+              </div></td>
               <td class="td">
                 <checkboxPage 
                   :modelValue="item?.status == 'active'? true : false"

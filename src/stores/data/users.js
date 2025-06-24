@@ -68,8 +68,6 @@ export const userStore = defineStore('userStore', () => {
           fullName: search,
         },
       })
-      console.log('Users', data)
-
       users.data = [
         ...data.data.map((item) => {
           return {

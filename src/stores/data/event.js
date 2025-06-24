@@ -51,7 +51,14 @@ export const eventStore = defineStore('eventStore', () => {
       })
       const newEvents = data.data || []
       const merged = [...newEvents, ...event.data]
-      event.data = merged.slice(0, event.limit)
+      console.log("newEvents", newEvents);
+      console.log("merged", merged);
+      const uniqueEvents = merged.reduce((acc, current) => {
+        const exists = acc.find(item => item._id === current._id)
+        if (!exists) acc.push(current)
+        return acc
+      }, [])
+      event.data = uniqueEvents.slice(0, event.limit)
       event.count += newEvents.length
       // console.log('socketEvent', data)
       // event.data = [...data.data, ...event.data]

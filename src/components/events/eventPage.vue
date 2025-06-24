@@ -8,7 +8,7 @@
         <filterSelect
           @change="updateType"
           v-model="searchEventData.user"
-          :name="userMessage"
+          name="user"
           class="w-full"
           placeholder="Выберите  сотрудника"
           :options="user_store.activeUser"
