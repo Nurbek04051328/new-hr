@@ -8,8 +8,8 @@
               <th class="th-first">№</th>
               <th class="th">{{ $t('photo') }}</th>
               <th class="th">{{ $t('fullName') }}</th>
+              <th class="th text-center">Номер сотрудника</th>
               <th class="th">{{ $t('department') }}</th>
-              <!-- <th class="th">Номер</th> -->
               <th class="th">{{ $t('role') }}</th>
               <th class="th">{{ $t('status') }}</th>
               <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
@@ -38,10 +38,15 @@
                 </div>
               </td>
               <td 
-                class="td-second"
+                class="td"
                 @click="$router.push({ name: 'worker-events', params: { id: item?._id } })"
               >
-                {{ item.fullName || '' }}
+                {{ item?.fullName || '' }}
+              </td>
+              <td 
+                class="td text-center"
+              >
+                {{ item?.employeeNo || '' }}
               </td>
               <td class="td"
               @click="$router.push({ name: 'worker-events', params: { id: item?._id } })"
