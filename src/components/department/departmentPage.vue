@@ -106,7 +106,7 @@ const getData = async () => {
     await Promise.all([
       department_store.allDepartment(),
       department_store.getParent(),
-      user_store.allUsers({limit:0}),
+      // user_store.allUsers({limit:0}),
     ])
     loading.setLoading(false)
   } catch (err) {

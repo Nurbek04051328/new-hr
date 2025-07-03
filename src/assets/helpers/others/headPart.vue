@@ -1,6 +1,6 @@
 <template>
   <div :class="['flex items-center justify-between', 'mb-3']">
-    <div class="relative flex">
+    <div class="relative flex items-center gap-2">
       <button v-if="backLink" @click="router.push({ name: backLink })">
         <ChevronLeftIcon
           class="w-[30px] h-[30px] mr-4 rounded-md bg-btn flex justify-center items-center text-whiteText hover:bg-btnHover"
@@ -9,7 +9,7 @@
       <h1 class="text-2xl font-bold text-mainText select-none">
         {{ title || route?.meta?.title[locale] || '' }}
       </h1>
-      <span class="bg-hover px-2 rounded-[13px] text-mainText absolute top-0 right-[-45px]">{{ count }}</span>
+      <span class="bg-hover px-2 rounded-[13px] text-mainText text-sm whitespace-nowrap">{{ count }}</span>
     </div>
 
     <div class="flex items-center gap-2">

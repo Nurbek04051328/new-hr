@@ -1,10 +1,12 @@
 <template>
   <Switch
     :checked="modelValue"
+    :disabled="disabled"
     @click="toggle"
     :class="[
       modelValue ? 'bg-btn' : 'bg-placeholder',
-      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out'
+      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
+      disabled ? 'opacity-50 cursor-not-allowed' : ''
     ]"
   >
     <span
@@ -107,10 +109,15 @@ const props = defineProps({
   modelValue: {
     type: Boolean,
     required: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
 const toggle = () => {
+  if (props.disabled) return
   emit('update:modelValue', !props.modelValue)
 }
 

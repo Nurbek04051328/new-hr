@@ -2,7 +2,7 @@
   <defaultHeader  />
   <doorDetailModal :users="users.data" title="Добавьте работника к двери" />
   <defaultSetting>
-    <headPart name="detailDoor" backLink="door" :newToggleBtn="true" :title="`Страница двери | ${ syncedDoorWorker.doorInfo?.title }`" />
+    <headPart name="detailDoor" backLink="door" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :title="`Страница двери | ${ syncedDoorWorker.doorInfo?.title }`" />
     <div class="parent" v-if="syncedDoorWorker.count > 0 && !loading.loading">
       <div class="child">
         <div class="tableDiv">
@@ -15,7 +15,7 @@
                 <th class="th">{{ $t('department') }}</th>
                 <th class="th">Статус</th>
                 <th class="th">{{ $t('date') }}</th>
-                <th class="th"></th>
+                <th class="th" v-if="['admin', 'boss'].includes(user?.role)"></th>
               </tr>
             </thead>
             <tbody>
@@ -42,7 +42,7 @@
                 <td class="td">{{ item?.user?.department?.name || '' }}</td>
                 <td class="td">
                   <button
-                    :disabled="item.status === 'success'"
+                    :disabled="item.status === 'success' && ['admin', 'boss'].includes(user?.role)"
                     @click="handleClick(item)"
                     class="px-3 py-1 rounded text-white"
                     :class="{
@@ -62,7 +62,7 @@
                     {{ convertDateShort(item?.time, 'hour-second')}}
                   </span>
                 </td>
-                <td class="td-last">
+                <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                   <dropdownPage
                     name="detailDoor"
                     edit = 'noEdit'
@@ -132,6 +132,11 @@ const loading = loadingStore()
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
+
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 
 import { removeStore } from '@/stores/helpers/remove'

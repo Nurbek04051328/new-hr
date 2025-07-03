@@ -131,6 +131,15 @@ export const role = [
       kr: 'Қоровул',
     },
   },
+  {
+    _id: 'observer',
+    name: {
+      en: 'Observer',
+      ru: 'Наблюдатель',
+      uz: 'Kuzatuvchi',
+      kr: 'Кузатувчи',
+    },
+  },
 ]
 
 export const limit = [

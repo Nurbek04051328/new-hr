@@ -13,7 +13,7 @@
               <th class="th">{{ $t('login') }}</th>
               <th class="th">{{ $t('type') }}</th>
               <th class="th">{{ $t('status') }}</th>
-              <th class="th-last"></th>
+              <th class="th-last" v-if="['admin', 'boss'].includes(user?.role)"></th>
             </tr>
           </thead>
 
@@ -46,10 +46,11 @@
                   @update:modelValue="val => {
                     item.status = val ? 'active' : 'inactive'
                     store.statusDoor(item._id)
-                  }" 
+                  }"
+                  :disabled="!['admin', 'boss'].includes(user?.role)" 
                 />
               </td>
-              <td class="td-last">
+              <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">
                 <dropdownPage
                   name="door"
                   :id="item?._id"
@@ -71,10 +72,17 @@
   <nothingPage :visibility="count <= 0 && !loading.loading" />
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
 import removePage from '@/assets/helpers/overlays/removePage.vue'
 import checkboxPage from '@/assets/helpers/others/checkboxPage.vue'
 import dropdownPage from '@/assets/table/dropdownPage.vue'
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
+
+
 
 defineProps({
   door: {

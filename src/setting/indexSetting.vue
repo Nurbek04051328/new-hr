@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-[200px] h-full xl:hidden">
+  <div class="min-w-[200px] max-h-[50px] flex-1 xl:hidden">
     <div class="p-1 h-full rounded-md">
       <nav class="flex h-full gap-4">
         <router-link

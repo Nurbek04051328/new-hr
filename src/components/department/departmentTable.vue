@@ -37,6 +37,7 @@
                     item.status = val ? 'active' : 'inactive'
                     store.statusDepartment(item._id)
                   }" 
+                  :disabled="!['admin', 'boss'].includes(user?.role)" 
                 />
               </td>
               <td class="td-last" v-if="['admin', 'boss'].includes(user?.role)">

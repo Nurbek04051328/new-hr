@@ -28,7 +28,7 @@ export const menu = [
       group: 'main',
       search: '',
     },
-    access:['admin', 'boss', 'chief'],
+    access:['admin', 'boss', 'chief', 'observer'],
   },
   {
     path: 'department',
@@ -44,7 +44,7 @@ export const menu = [
       icon: BuildingLibraryIcon,
       group: 'main',
       search: '',
-      access:['admin', 'boss', 'chief'],
+      access:['admin', 'boss', 'chief', 'observer'],
     },
     
   },
@@ -62,7 +62,7 @@ export const menu = [
       icon: UsersIcon,
       group: 'main',
       search: '',
-      access:['admin', 'boss', 'chief'],
+      access:['admin', 'boss', 'chief', 'observer'],
     },
   },
   // {
@@ -95,7 +95,7 @@ export const menu = [
       icon: ClipboardDocumentCheckIcon,
       group: 'main',
       search: '',
-      access:['admin', 'boss', 'chief'],
+      access:['admin', 'boss', 'chief','observer'],
     },
   },
   // {
@@ -150,7 +150,7 @@ export const menu = [
       icon: Cog8ToothIcon,
       group: 'setting',
       search: '',
-      access:['admin', 'boss',],
+      access:['admin', 'boss', 'observer'],
     },
     children: [...setting, ...detailSettingMenu],
   },

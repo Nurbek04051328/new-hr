@@ -3,7 +3,7 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultSetting>
-    <headPart name="reason" :newToggleBtn="true" />
+    <headPart name="reason" :newToggleBtn="['admin', 'boss'].includes(user?.role)" />
     <reasonTable :reason="reason.data" :count="reason.count" :limit="reason.limit" :page="reason.page" />
 
     <paginationPage
@@ -37,6 +37,10 @@ const loading = loadingStore()
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
+
+import { authStore } from '@/stores/admin/auth'
+const auth_store = authStore()
+const { user } = storeToRefs(auth_store)
 
 const search = ref('')
 const searchEvent = async () => {
