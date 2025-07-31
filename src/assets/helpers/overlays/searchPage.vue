@@ -148,9 +148,9 @@ const items = [
   },
   {
     id: 3,
-    name: 'Users',
+    name: 'Workers',
     description: 'Add freeform text with basic formatting options.',
-    url: 'users',
+    url: 'workers',
     icon: UsersIcon,
   },
   {

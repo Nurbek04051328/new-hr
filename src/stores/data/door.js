@@ -86,6 +86,7 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
+      
       data.status = data.status == 'active'
       door.data = [data, ...door.data.slice(0, door.limit - 1)]
       door.count += 1
@@ -100,11 +101,12 @@ export const doorStore = defineStore('doorStore', () => {
     try {
       loading.setLoading(true) 
       const { data } = await api.put(`${url}`, payload)
+      console.log("Update Door Data", data);
       door.data = door.data?.map((item) => {
         if (item?._id == data?._id)
           return {
             ...data,
-            status: data.status == 'active',
+            status: data.status
           }
         return item
       })

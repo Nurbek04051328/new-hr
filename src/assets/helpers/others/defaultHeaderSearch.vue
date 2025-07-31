@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex items-center h-full xl:hidden relative" id="search">
+  <div class="flex-1 flex items-center h-full md:hidden relative" id="search">
     <label for="search">
       <MagnifyingGlassIcon class="w-6 h-6 text-placeholder sm:w-5 sm:h-5" />
     </label>

@@ -13,7 +13,7 @@
       <div class="flex items-center gap-5">
         <button
         type="button"
-        class="hidden xl:flex w-10 h-10 items-center justify-center rounded-md bg-btn hover:bg-btnHover"
+        class="hidden md:flex w-10 h-10 items-center justify-center rounded-md bg-btn hover:bg-btnHover"
         @click="search_store.setShow(true)"
         >
         <MagnifyingGlassIcon class="w-6 h-6 text-whiteText sm:w-5 sm:h-5" />
