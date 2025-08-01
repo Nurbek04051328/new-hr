@@ -164,7 +164,9 @@ export const doorStore = defineStore('doorStore', () => {
 
   // Detail page
 
-  const allSyncedDoorWorker = async (search) => {
+  const allSyncedDoorWorker = async (search, user) => {
+    console.log("searchSyncedDoor", search);
+    
     try {
       const { data } = await api.get('user-synced-door', {
         params: {
@@ -173,6 +175,8 @@ export const doorStore = defineStore('doorStore', () => {
           ...search,
         },
       })
+      console.log("Synced Door Data", data);
+      
       syncedDoorWorker.data = [
         ...data.data.map((item) => {
           return {

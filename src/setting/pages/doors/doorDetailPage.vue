@@ -1,5 +1,5 @@
 <template>
-  <defaultHeader  />
+  <defaultHeader  v-model="search" @search-event="searchEvent" />
   <doorDetailModal :users="users.data" title="Добавьте работника к двери" />
   <defaultSetting>
     <headPart name="detailDoor" backLink="door" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :title="`Страница двери | ${ syncedDoorWorker.doorInfo?.title }`" />
@@ -178,6 +178,19 @@ const getData = async () => {
     console.warn('Error', err)
   }
 }
+
+// Header search
+const search = ref('')
+const searchEvent = async () => {
+  if (search.value?.length >= 2) {
+    await store.allSyncedDoorWorker({door:route.params.id, fullName: search.value})
+  } else {
+    // if (search.value) {
+    //   await store.allUsers()
+    // }
+  }
+}
+
 
 onMounted(() => {
   if (route.query.limit) {
