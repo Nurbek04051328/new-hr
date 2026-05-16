@@ -49,9 +49,10 @@ export const userStore = defineStore('userStore', () => {
     }
   }
 
-  const changePage = async (value) => {
+  const changePage = async (value, query) => {
+    console.log(route.query)
     users.page = value
-    router.push({ name: 'workers', query: { page: users.page } })
+    router.push({ name: 'workers', query: { ...query, page: users.page } })
   }
 
   const reloadCalendarFunction = async () => {
@@ -68,8 +69,8 @@ export const userStore = defineStore('userStore', () => {
           fullName: search,
         },
       })
-      console.log("users", data);
-      
+      console.log('users', data)
+
       users.data = [
         ...data.data.map((item) => {
           return {
@@ -90,7 +91,7 @@ export const userStore = defineStore('userStore', () => {
     try {
       loading.setLoading(true)
       const { data } = await api.post(url, payload)
-      
+
       data.status = data.status
       users.data = [data, ...users.data.slice(0, users.limit - 1)]
       users.count += 1
@@ -151,11 +152,10 @@ export const userStore = defineStore('userStore', () => {
     }
   }
 
-
   // UserCaLENDAR
   const getWorkdayCalendar = async (params) => {
     try {
-      const { data } = await api.get(`statistic/user/calendar`, {params})
+      const { data } = await api.get(`statistic/user/calendar`, { params })
       return data
     } catch (err) {
       console.warn('Error', err)
@@ -172,25 +172,25 @@ export const userStore = defineStore('userStore', () => {
   }
 
   const saveUserCalendar = async (payload) => {
-      try {
-        loading.setLoading(true)
-        // console.log("ketdi payload", payload);
-        
-        const { data } = await api.put(`${url}/calendar`, payload)
-        // console.log('Keldi payload', data)
-  
-        return data
-        loading.setLoading(false)
-        notif.setNotif(true, userCelendarUpdatedMessage, 'success')
-      } catch (err) {
-        console.warn('Error', err)
-      }
+    try {
+      loading.setLoading(true)
+      // console.log("ketdi payload", payload);
+
+      const { data } = await api.put(`${url}/calendar`, payload)
+      // console.log('Keldi payload', data)
+
+      return data
+      loading.setLoading(false)
+      notif.setNotif(true, userCelendarUpdatedMessage, 'success')
+    } catch (err) {
+      console.warn('Error', err)
     }
+  }
 
   const userCreateCalendar = async (payload) => {
     try {
       const { data } = await api.post(`${url}/calendar`, payload)
-      
+
       return data
     } catch (err) {
       console.warn('Error', err)
@@ -244,7 +244,7 @@ export const userStore = defineStore('userStore', () => {
     getWorkdayCalendar,
     getOneWorkdayCalendar,
     userCreateCalendar,
-    saveUserCalendar
+    saveUserCalendar,
   }
 })
 

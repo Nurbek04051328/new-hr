@@ -92,8 +92,6 @@
 
 <script setup>
 import defaultMain from '@/views/home/defaultMain.vue'
-import { ArrowPathIcon, XMarkIcon, MagnifyingGlassIcon, UserIcon } from '@heroicons/vue/24/outline';
-import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 
 import nothingPage from '@/assets/helpers/others/nothingPage.vue'
@@ -104,7 +102,7 @@ import { role } from '@/helpers/object';
 import { convertDateShort } from '@/helpers/func';
 import VueEasyLightbox from 'vue-easy-lightbox';
 
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { eventStore } from '@/stores/data/event'

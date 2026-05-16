@@ -2,7 +2,11 @@
   <workerHistoryModal />
 
   <defaultMain>
-    <headPart title=" " name="worker-history" :newToggleBtn="['admin', 'boss'].includes(user?.role)" />
+    <headPart
+      title=" "
+      name="worker-history"
+      :newToggleBtn="['admin', 'boss'].includes(user?.role)"
+    />
 
     <workerHistoryTable
       :workerHistories="workerHistory.data"
@@ -28,18 +32,12 @@ import workerHistoryTable from './workerHistoryTable.vue'
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { workerHistoryStore } from '@/stores/data/workerHistory'
 const store = workerHistoryStore()
 const { workerHistory } = storeToRefs(store)
-
-import { userStore } from '@/stores/data/users'
-const user_store = userStore()
-
-import { departmentStore } from '@/stores/data/department'
-const department = departmentStore()
 
 import { loadingStore } from '@/stores/helpers/loading'
 const loading = loadingStore()
@@ -48,11 +46,9 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
-
 import { authStore } from '@/stores/admin/auth'
 const auth_store = authStore()
 const { user } = storeToRefs(auth_store)
-
 
 const changePage = (value) => {
   store.changePage(value)
@@ -77,7 +73,6 @@ const updateLimit = async (value) => {
   router.replace({ query: newQuery })
 }
 
-
 const getData = async () => {
   try {
     loading.setLoading(true)
@@ -96,5 +91,4 @@ onMounted(() => {
   store.workerHistory.page = +route.query.page || 1
   getData()
 })
-
 </script>

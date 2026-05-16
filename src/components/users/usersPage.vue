@@ -3,9 +3,12 @@
 
   <defaultHeader v-model="search" @search-event="searchEvent" />
   <defaultMain>
-    <headPart name="workers" :newToggleBtn="['admin', 'boss'].includes(user?.role)" :count="users.count">
+    <headPart
+      name="workers"
+      :newToggleBtn="['admin', 'boss'].includes(user?.role)"
+      :count="users.count"
+    >
       <div class="w-[250px]">
-
         <getSelect
           @update-type="updateType"
           v-model="searchUserData.department"
@@ -62,7 +65,12 @@
       </button>
     </headPart>
 
-    <usersTable :workers="users.data" :count="users.count" :page="users.page" :limit="users.limit" />
+    <usersTable
+      :workers="users.data"
+      :count="users.count"
+      :page="users.page"
+      :limit="users.limit"
+    />
 
     <paginationPage
       v-model="store.users.page"
@@ -79,7 +87,7 @@ import defaultHeader from '@/views/home/defaultHeader.vue'
 import defaultMain from '@/views/home/defaultMain.vue'
 import usersTable from './usersTable.vue'
 import usersModal from './usersModal.vue'
-import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import headPart from '@/assets/helpers/others/headPart.vue'
 import paginationPage from '@/assets/helpers/others/paginationPage.vue'
 import typeSelect from '@/assets/helpers/others/typeSelect.vue'
@@ -125,8 +133,6 @@ const searchEvent = async () => {
 //   }
 // })
 
-
-
 const presences = ref([
   { _id: 'came', name: 'Пришедшие' },
   { _id: 'not came', name: 'Не пришедшие' },
@@ -136,10 +142,8 @@ const genders = ref([
   { _id: 'female', name: 'Женский' },
 ])
 
-
-
 const changePage = (value) => {
-  store.changePage(value)
+  store.changePage(value, route.query)
   getData()
 }
 
@@ -167,12 +171,15 @@ const searchUserData = ref({
   presence: '',
   gender: '',
 })
+
 const updateType = async () => {
   if (searchUserData.value) {
     loading.setLoading(true)
     const filtered = Object.fromEntries(
-      Object.entries(searchUserData.value).filter(([_, v]) => v !== '')
+      Object.entries(searchUserData.value).filter(([_, v]) => v !== ''),
     )
+    // router.replace({ query: { ...route.query, ...filtered } })
+    store.changePage(1, { ...route.query, ...filtered })
     await store.allUsers(filtered)
     return loading.setLoading(false)
   }
@@ -186,29 +193,49 @@ const clearSearch = async () => {
     presence: '',
     gender: '',
   }
-  getData()
-};
+  changePage(1)
+  router.replace({ query: { limit: selectedLimit.value } })
+  // getData()
+}
 
 const getData = async () => {
   try {
     const filtered = Object.fromEntries(
-      Object.entries(searchUserData.value).filter(([_, v]) => v !== '')
+      Object.entries(searchUserData.value).filter(([_, v]) => v !== ''),
     )
     loading.setLoading(true)
-    await Promise.all([store.allUsers(filtered), d_store.allDepartment(), door_store.allDoor({status: 'active', doorStatus:'online'})])
+    await Promise.all([
+      store.allUsers(filtered),
+      d_store.allDepartment(),
+      door_store.allDoor({ status: 'active', doorStatus: 'online' }),
+    ])
     loading.setLoading(false)
   } catch (err) {
     console.warn('Error', err)
   }
 }
 
-
-
 onMounted(() => {
   if (route.query.limit) {
     selectedLimit.value = +route.query.limit
     users.value.limit = selectedLimit.value
   }
+  if (route.query.page) {
+    users.value.page = +route.query.page
+  }
+  if (route.query.department) {
+    searchUserData.value.department = route.query.department
+  }
+  if (route.query.role) {
+    searchUserData.value.role = route.query.role
+  }
+  if (route.query.presence) {
+    searchUserData.value.presence = route.query.presence
+  }
+  if (route.query.gender) {
+    searchUserData.value.gender = route.query.gender
+  }
+
   store.users.page = +route.query.page || 1
   getData()
 })

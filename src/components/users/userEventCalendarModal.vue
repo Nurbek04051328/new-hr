@@ -46,8 +46,16 @@
               </DialogTitle>
               <div class="flex flex-col gap-4">
                 <div v-if="loading">Yuklanmoqda...</div>
-                <div v-else-if="calendarData && Object.keys(calendarData).length > 0" class="flex flex-col gap-2 p-4">
-                  <div class="mb-2 gap-2 flex" v-if="calendarData.dayStatus == 'workday' || calendarData.dayStatus == 'weekend'">
+                <div
+                  v-else-if="calendarData && Object.keys(calendarData).length > 0"
+                  class="flex flex-col gap-2 p-4"
+                >
+                  <div
+                    class="mb-2 gap-2 flex"
+                    v-if="
+                      calendarData.dayStatus == 'workday' || calendarData.dayStatus == 'weekend'
+                    "
+                  >
                     <label class="text-lg text-gray-500 2xl:text-[14px]">Статус дня:</label>
                     <select v-model="selectedStatus" class="border rounded px-2 py-1">
                       <option value="workday">Рабочий день</option>
@@ -57,56 +65,90 @@
                     </select>
                     <!-- <button class="ml-2 btn" @click="updateStatus">Сохранить</button> -->
                   </div>
-                  <div class="mb-2 flex gap-4"  v-if="calendarData.dayStatus=='absence' || calendarData.dayStatus=='holiday'">
+                  <div
+                    class="mb-2 flex gap-4"
+                    v-if="
+                      calendarData.dayStatus == 'absence' || calendarData.dayStatus == 'holiday'
+                    "
+                  >
                     <div class="text-lg text-gray-500 2xl:text-[14px]">Статус дня:</div>
                     <div class="text-xl font-medium text-mainText 2xl:text-[16px]">
-                      {{ calendarData.dayStatus=='holiday'? 'Праздник' : 'Отсутствие' || '-' }}
+                      {{ calendarData.dayStatus == 'holiday' ? 'Праздник' : 'Отсутствие' || '-' }}
                     </div>
                   </div>
                   <div class="mb-2 flex gap-4">
                     <div class="text-lg text-gray-500 2xl:text-[14px]">Причина:</div>
-                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">{{ calendarData.reason || '-' }}</div>
+                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">
+                      {{ calendarData.reason || '-' }}
+                    </div>
                   </div>
                   <div class="mb-2 flex gap-4">
                     <div class="text-lg text-gray-500 2xl:text-[14px]">Пришел:</div>
-                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">{{ formatTime(calendarData.arrival) || '-' }}</div>
+                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">
+                      {{ formatTime(calendarData.arrival) || '-' }}
+                    </div>
                   </div>
                   <div class="mb-2 flex gap-4">
                     <div class="text-lg text-gray-500 2xl:text-[14px]">Ушел:</div>
-                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">{{ formatTime(calendarData.departure) || '-' }}</div>
+                    <div class="text-xl font-medium text-mainText 2xl:text-[16px]">
+                      {{ formatTime(calendarData.departure) || '-' }}
+                    </div>
                   </div>
                   <div class="mb-2 flex gap-4">
                     <div class="text-lg text-gray-500 2xl:text-[14px]">Продолжительность:</div>
                     <div class="text-xl font-medium text-mainText 2xl:text-[16px]">
-                      {{ calendarData.workDuration ? `${calendarData.workDuration.hours}ч ${calendarData.workDuration.minutes}м` : '-' }}
+                      {{
+                        calendarData.workDuration
+                          ? `${calendarData.workDuration.hours}ч ${calendarData.workDuration.minutes}м`
+                          : '-'
+                      }}
                     </div>
                   </div>
                   <!-- Events -->
                   <div class="mb-2 flex gap-4">
                     <span class="text-lg text-gray-500 2xl:text-[14px]">События:</span>
-                    <div v-if="calendarData.events && calendarData.events.length">
-                      <ul class="list-disc ml-6">
-                        <li v-for="(event, idx) in calendarData.events" :key="idx" class="mb-2" :class="event?.action === 'exit' ? 'text-redColor' : event?.action === 'enter' ? 'text-greenColor' : ''">
-                          {{ event.action === 'enter' ? 'Вход' : event.action === 'exit' ? 'Выход' : event.action }}
-                          <span v-if="event.time">({{ formatTime(event.time) }})</span>
-                          <span v-if="event.pictureURL">
-                            <img 
-                              :src="getImageUrl(event.pictureURL)" 
-                              alt="event" 
-                              class="inline w-8 h-8 ml-2 rounded cursor-pointer"
-                              @click="openLightbox(event?.pictureURL)"
-                            />
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div v-else>
-                      <button class="btn" @click="addEventForm">+ Добавить событие</button>
-                        <div v-for="(event, idx) in eventForms" :key="idx" class="mt-2 flex gap-2 items-center">
-                          <select
-                            v-model="event.door"
-                            class="w-full border rounded px-2 py-1"
+                    <div>
+                      <div v-if="calendarData.events && calendarData.events.length">
+                        <ul class="list-disc ml-6">
+                          <li
+                            v-for="(event, idx) in calendarData.events"
+                            :key="idx"
+                            class="mb-2"
+                            :class="
+                              event?.action === 'exit'
+                                ? 'text-redColor'
+                                : event?.action === 'enter'
+                                  ? 'text-greenColor'
+                                  : ''
+                            "
                           >
+                            {{
+                              event.action === 'enter'
+                                ? 'Вход'
+                                : event.action === 'exit'
+                                  ? 'Выход'
+                                  : event.action
+                            }}
+                            <span v-if="event.time">({{ formatTime(event.time) }})</span>
+                            <span v-if="event.pictureURL">
+                              <img
+                                :src="getImageUrl(event.pictureURL)"
+                                alt="event"
+                                class="inline w-8 h-8 ml-2 rounded cursor-pointer"
+                                @click="openLightbox(event?.pictureURL)"
+                              />
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <button class="btn" @click="addEventForm">+ Добавить событие</button>
+                        <div
+                          v-for="(event, idx) in eventForms"
+                          :key="idx"
+                          class="mt-2 flex gap-2 items-center"
+                        >
+                          <select v-model="event.door" class="w-full border rounded px-2 py-1">
                             <option value="" disabled>Выберите двери</option>
                             <option
                               v-for="door in door_store.activeDoors"
@@ -120,22 +162,21 @@
                             <option value="enter">Вход</option>
                             <option value="exit">Выход</option>
                           </select>
-                          <input type="datetime-local" v-model="event.time" class="border rounded px-2 py-1" />
+                          <input
+                            type="datetime-local"
+                            v-model="event.time"
+                            class="border rounded px-2 py-1"
+                          />
                           <button class="cancelBtn" @click="removeEventForm(idx)">Удалить</button>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div v-else>
-                  Ma'lumot topilmadi.
-                </div>
+                <div v-else>Ma'lumot topilmadi.</div>
                 <div class="flex items-center gap-4 ml-auto mt-4">
-                  <button type="button" @click="handleClose" class="cancelBtn">
-                    Отмена
-                  </button>
-                  <button type="button" @click="saveEvents" class="btn">
-                    Сохранить
-                  </button>
+                  <button type="button" @click="handleClose" class="cancelBtn">Отмена</button>
+                  <button type="button" @click="saveEvents" class="btn">Сохранить</button>
                 </div>
               </div>
             </DialogPanel>
@@ -144,11 +185,7 @@
       </div>
     </Dialog>
   </TransitionRoot>
-  <VueEasyLightbox
-    :visible="visible"
-    :imgs="[currentImage]"
-    @hide="closeLightbox"
-  />
+  <VueEasyLightbox :visible="visible" :imgs="[currentImage]" @hide="closeLightbox" />
 </template>
 
 <script setup>
@@ -163,18 +200,17 @@ import getSelect from '@/assets/helpers/others/getSelect.vue'
 
 import { url } from '@/helpers/api'
 import { doorStore } from '@/stores/data/door'
-import VueEasyLightbox from 'vue-easy-lightbox';
+import VueEasyLightbox from 'vue-easy-lightbox'
 const store = userStore()
 const event_store = eventStore()
 const door_store = doorStore()
 import { nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 
-
 const route = useRoute()
 const props = defineProps({
   show: { type: Boolean, default: true },
-  calendarId: { type: String, required: true }
+  calendarId: { type: String, required: true },
 })
 const emit = defineEmits(['close', 'reload'])
 
@@ -182,8 +218,6 @@ const calendarData = ref(null)
 const loading = ref(false)
 const selectedStatus = ref('')
 const eventForms = ref([])
-
-
 
 function handleClose() {
   emit('close')
@@ -211,9 +245,9 @@ async function fetchCalendarData(id) {
   loading.value = true
   const data = await store.getOneWorkdayCalendar(id)
   // console.log("dataTanlangan", data);
-  
+
   calendarData.value = { ...data }
-  if( data.dayStatus === 'workday' || data.dayStatus === 'weekend') {
+  if (data.dayStatus === 'workday' || data.dayStatus === 'weekend') {
     selectedStatus.value = data.dayStatus
   } else {
     selectedStatus.value = ''
@@ -221,8 +255,6 @@ async function fetchCalendarData(id) {
 
   loading.value = false
 }
-
-
 
 function addEventForm() {
   eventForms.value.push({ action: 'enter', door: '', time: '' })
@@ -232,27 +264,31 @@ function removeEventForm(idx) {
   eventForms.value.splice(idx, 1)
 }
 
-
-
 async function saveEvents() {
   // Faqat qiymati borlarini yuborish
-  const validEvents = eventForms.value.filter(e => e.action && e.time)
+  const validEvents = eventForms.value.filter((e) => e.action && e.time)
   if (!props.calendarId) return
   loading.value = true
   try {
-    
     await store.saveUserCalendar({
       _id: calendarData.value.calendarId,
       user: route.params.id,
-      shift: selectedStatus.value == 'weekend' ? 'off' : 'full_day'
+      shift: selectedStatus.value == 'weekend' ? 'off' : 'full_day',
     })
+    console.log(validEvents)
     if (validEvents.length) {
-
       for (const event of validEvents) {
-        await event_store.addCalendarEvent({
-          type: "face",
+        console.log({
+          type: 'face',
           action: event.action,
-          time: event.time,
+          time: `${event.time}+05:00`,
+          door: event.door,
+          user: route.params.id,
+        })
+        await event_store.addCalendarEvent({
+          type: 'face',
+          action: event.action,
+          time: `${event.time}+05:00`,
           door: event.door,
           user: route.params.id,
         })
@@ -266,31 +302,28 @@ async function saveEvents() {
   }
 }
 
-
-
 watch(
   () => props.calendarId,
   async (newId) => {
     await fetchCalendarData(newId)
     await nextTick()
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // Lightbox holati
-const visible = ref(false);
-const currentImage = ref('');
+const visible = ref(false)
+const currentImage = ref('')
 
 // Lightboxni yopish funksiyasi
 const closeLightbox = () => {
-  visible.value = false;
-  currentImage.value = '';
-};
+  visible.value = false
+  currentImage.value = ''
+}
 
 // Lightboxni ochish funksiyasi
 const openLightbox = (imageUrl) => {
-  currentImage.value = `${url}/${imageUrl}`;
-  visible.value = true;
-};
-
+  currentImage.value = `${url}/${imageUrl}`
+  visible.value = true
+}
 </script>
